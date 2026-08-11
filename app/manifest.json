@@ -1,0 +1,20 @@
+{
+  "name": "Smart World Market — Universe Marketplace",
+  "short_name": "Smart World Market",
+  "description": "The world's first universe marketplace — AI, Physical, Biological, Human & Space products",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#03030a",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%237c3aed'/><text y='130' x='35' font-size='120' font-family='sans-serif'>⚡</text></svg>", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%237c3aed'/><text y='360' x='80' font-size='320' font-family='sans-serif'>⚡</text></svg>", "sizes": "512x512", "type": "image/svg+xml" }
+  ],
+  "shortcuts": [
+    { "name": "Vitrin", "url": "/vitrin", "description": "Browse all universe products" },
+    { "name": "Search", "url": "/search-page", "description": "AI-powered universe search" },
+    { "name": "Dashboard", "url": "/member", "description": "Member dashboard" }
+  ],
+  "categories": ["shopping", "productivity", "utilities"]
+}

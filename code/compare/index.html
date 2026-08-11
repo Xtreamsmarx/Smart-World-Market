@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Compare Products — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/compare/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/compare" class="active">Compare</a></li>
+    <li><a href="/search-page">Search</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/sell" class="btn btn-primary">+ List</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="cmp-hero">
+  <div class="cmp-hero-inner">
+    <div class="sec-label">✦ Side-by-Side Analysis</div>
+    <h1>Compare <span class="gt">Universe Products</span></h1>
+    <p>Add up to 4 products — get scores, radar chart, and AI recommendation</p>
+
+    <div class="add-search-wrap" id="add-search-wrap">
+      <div class="add-search-bar">
+        <span style="font-size:1.1rem;color:rgba(255,255,255,.4)">🔍</span>
+        <input type="text" id="add-input" class="add-input" placeholder="Search a product to compare..." autocomplete="off">
+        <span id="slot-counter" class="slot-counter">0 / 4</span>
+      </div>
+      <div id="add-dropdown" class="add-dropdown"></div>
+    </div>
+
+    <div id="quick-cats" class="quick-cats"></div>
+  </div>
+</div>
+
+<!-- Comparison area -->
+<div class="cmp-wrap" id="cmp-wrap" style="display:none">
+
+  <!-- Actions bar -->
+  <div class="cmp-actions" id="cmp-actions"></div>
+
+  <!-- Scoreboard -->
+  <div class="scoreboard" id="scoreboard"></div>
+
+  <!-- 2-column: radar + table -->
+  <div class="cmp-grid">
+
+    <!-- Left: Radar chart -->
+    <div class="radar-wrap" id="radar-container" style="display:none"></div>
+
+    <!-- Right: Product cards + detailed table -->
+    <div>
+      <!-- Product header cards -->
+      <div class="cmp-header-row" id="cmp-header-row"></div>
+
+      <!-- Comparison table -->
+      <div class="cmp-table-wrap">
+        <table class="cmp-table">
+          <tbody id="cmp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Recommendation -->
+  <div class="ai-rec" id="ai-rec" style="display:none"></div>
+</div>
+
+<!-- Empty state -->
+<div class="empty-cmp" id="empty-cmp">
+  <div style="font-size:3.5rem;margin-bottom:1.25rem">⚖️</div>
+  <h3>No products selected yet</h3>
+  <p>Search above, click a category pill, or pick from featured products below to start comparing</p>
+  <div class="grid g3" id="suggested-grid" style="max-width:900px;margin:2rem auto 0"></div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/compare/script.js"></script>
+</body>
+</html>

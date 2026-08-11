@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Universe Search � Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/search/style.css">
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">?</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/compare">Compare</a></li><li><a href="/compose">?? Compose</a></li><li><a href="/search-page" class="active">Search</a></li>
+    <li><a href="/member">Dashboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/sell" class="btn btn-primary">+ List</a>
+  </div>
+</nav>
+
+<div class="search-hero">
+  <canvas id="cv"></canvas>
+  <div class="search-hero-content">
+    <div class="sec-label">? Universe Intelligence Search</div>
+    <h1>Find Anything in the <span class="gt">Universe</span></h1>
+    <p>Real search engine + RAG AI � powered by your local inventory of 100+ universe products</p>
+
+    <div class="big-search-wrap" id="big-sw">
+      <div class="big-search-bar">
+        <span class="big-search-icon">??</span>
+        <input type="text" id="big-inp" class="big-inp" placeholder="Search or ask anything about any product..." autocomplete="off" onkeydown="if(event.key==='Enter')doSearch()">
+        <button class="search-mode-btn active" id="mode-search" onclick="setMode('search')">?? Search</button>
+        <button class="search-mode-btn" id="mode-ai" onclick="setMode('ai')">?? Ask AI</button>
+      </div>
+      <div id="big-suggest" class="suggest-drop"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Results area -->
+<div class="results-wrap">
+  <!-- Left: Results -->
+  <div class="results-main">
+    <div id="results-info" style="font-size:.85rem;color:var(--t2);margin-bottom:1.5rem;min-height:20px"></div>
+    <div id="results-grid" class="grid g2"></div>
+    <div id="ai-result-box" style="display:none"></div>
+    <div id="ai-result-cards" class="grid g3" style="margin-top:1.5rem"></div>
+    <div id="no-result" style="display:none;text-align:center;padding:4rem;color:var(--t2)">
+      <div style="font-size:3rem;margin-bottom:1rem">??</div>
+      <h3>Nothing found</h3>
+      <p style="margin-top:.5rem">Try different keywords or <button class="btn btn-outline btn-sm" onclick="setMode('ai');doSearch()">ask the AI</button></p>
+    </div>
+  </div>
+
+  <!-- Right: AI panel + quick cats -->
+  <aside class="results-aside">
+    <div class="aside-card" id="ai-chat-card">
+      <div class="aside-card-title">?? AI Assistant</div>
+      <p style="font-size:.82rem;color:var(--t2);margin-bottom:1rem">Ask natural language questions about products in our universe inventory.</p>
+      <div id="aside-ai-answer" style="min-height:60px;margin-bottom:1rem;font-size:.875rem;color:var(--t2)">Type a question above and click "Ask AI"</div>
+      <div style="display:flex;gap:.5rem">
+        <input type="text" class="inp" id="aside-ai-inp" placeholder="Best AI for cancer detection?" style="flex:1;font-size:.82rem" onkeydown="if(event.key==='Enter')doAsideAI()">
+        <button class="btn btn-primary btn-sm" onclick="doAsideAI()">Ask</button>
+      </div>
+    </div>
+
+    <div class="aside-card" style="margin-top:1rem">
+      <div class="aside-card-title">? Quick Categories</div>
+      <div style="display:flex;flex-direction:column;gap:.4rem">
+        <button class="q-cat-btn" onclick="quickSearch('Language Model')">?? Language Models</button>
+        <button class="q-cat-btn" onclick="quickSearch('Healthcare AI')">?? Healthcare AI</button>
+        <button class="q-cat-btn" onclick="quickSearch('Biological')">?? Biological</button>
+        <button class="q-cat-btn" onclick="quickSearch('Space Tech')">?? Space Tech</button>
+        <button class="q-cat-btn" onclick="quickSearch('Physical Hardware')">?? Physical Hardware</button>
+        <button class="q-cat-btn" onclick="quickSearch('Financial AI')">?? Financial AI</button>
+        <button class="q-cat-btn" onclick="quickSearch('Robotics')">?? Robotics</button>
+        <button class="q-cat-btn" onclick="quickSearch('Climate & Environment')">?? Climate & Environment</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/search/script.js"></script>
+</body>
+</html>

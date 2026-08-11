@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sell — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<style>
+body{background:var(--space);padding-top:62px}
+.sell-hero{background:radial-gradient(ellipse at center,#1a0533,var(--space) 70%);padding:3rem 2rem;text-align:center;border-bottom:1px solid var(--border)}
+.sell-body{max-width:900px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 320px;gap:2rem;align-items:start}
+.form-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem;margin-bottom:1.5rem}
+.fc-title{font-size:1rem;font-weight:800;margin-bottom:1.5rem;display:flex;align-items:center;gap:.6rem}
+.fg{margin-bottom:1.1rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.preview-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;position:sticky;top:80px}
+.preview-head{background:var(--grad);padding:1.5rem;text-align:center;font-size:.72rem;color:rgba(255,255,255,.7);font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.preview-body{padding:1.5rem}
+.preview-name{font-size:1.1rem;font-weight:800;margin-bottom:.25rem}
+.preview-cat{font-size:.72rem;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.75rem}
+.preview-price{font-size:1.75rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.benefit{display:flex;gap:.75rem;margin-bottom:.9rem;align-items:flex-start}
+.benefit-icon{font-size:1.25rem;flex-shrink:0}
+.benefit-title{font-weight:700;font-size:.875rem;margin-bottom:.15rem}
+.benefit-desc{font-size:.78rem;color:var(--t2)}
+.success-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center}
+.success-box{background:var(--nebula);border:1px solid var(--border);border-radius:var(--r-xl);padding:3rem;max-width:460px;width:90%;text-align:center}
+@media(max-width:768px){.sell-body{grid-template-columns:1fr}.preview-card{position:static}.fr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li><li><a href="/vitrin">Vitrin</a></li><li><a href="/sell" class="active">Sell</a></li>
+  </ul>
+  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a><a href="/vitrin" class="btn btn-outline">Browse</a></div>
+</nav>
+
+<div class="sell-hero">
+  <div class="badge badge-v" style="margin-bottom:1rem">💰 Start Earning Today</div>
+  <h1>List Your Product on the <span class="gt">Universe</span></h1>
+  <p style="color:var(--t2);margin-top:.75rem;font-size:1rem">AI Models · Hardware · Biotech · Space Tech · Human Services — everything is welcome</p>
+</div>
+
+<div class="sell-body">
+  <div>
+    <form id="sell-form">
+      <!-- Section 1 -->
+      <div class="form-card">
+        <div class="fc-title">🌌 Product Information</div>
+        <div class="fg"><label class="lbl">Product Name <span style="color:var(--red)">*</span></label><input type="text" class="inp" id="f-name" placeholder="e.g. MedVision Pro, QuantumChip AI..." required oninput="preview()"></div>
+        <div class="fg"><label class="lbl">Category <span style="color:var(--red)">*</span></label>
+          <select class="inp" id="f-cat" oninput="preview()">
+            <option>Language Model</option><option>Image Generation</option><option>Code Generation</option>
+            <option>Voice & Audio</option><option>Computer Vision</option><option>Data Analysis</option>
+            <option>Healthcare AI</option><option>Financial AI</option><option>Robotics</option>
+            <option>Cybersecurity</option><option>Physical Hardware</option><option>Biological</option>
+            <option>Space Tech</option><option>Climate & Environment</option><option>Human Services</option><option>Custom</option>
+          </select></div>
+        <div class="fg"><label class="lbl">Short Description <span style="color:var(--red)">*</span></label><input type="text" class="inp" id="f-short" placeholder="One line capturing what your product does" maxlength="120" required oninput="preview()"></div>
+        <div class="fg"><label class="lbl">Full Description <span style="color:var(--red)">*</span></label><textarea class="inp" id="f-desc" rows="5" placeholder="Detailed description: capabilities, training, use cases, benchmarks..." required></textarea></div>
+        <div class="fg"><label class="lbl">Tags (comma separated)</label><input type="text" class="inp" id="f-tags" placeholder="AI, neural network, medical, real-time..."><div style="font-size:.72rem;color:var(--t3);margin-top:.35rem">Help buyers find your product</div></div>
+      </div>
+
+      <!-- Section 2 -->
+      <div class="form-card">
+        <div class="fc-title">⚙️ Technical Specifications</div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Parameters / Size</label><input type="text" class="inp" id="f-params" placeholder="e.g. 7B, 340M, Hardware"></div>
+          <div class="fg"><label class="lbl">Accuracy / Performance</label><input type="text" class="inp" id="f-acc" placeholder="e.g. 94.7%, 99 TOPS"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Framework</label><select class="inp" id="f-fw"><option>PyTorch</option><option>TensorFlow</option><option>JAX</option><option>ONNX</option><option>Hardware</option><option>Custom</option></select></div>
+          <div class="fg"><label class="lbl">Response Time</label><input type="text" class="inp" id="f-rt" placeholder="e.g. < 200ms, 2-5s, Hardware"></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Input Format</label><input type="text" class="inp" id="f-in" placeholder="Text, Image, Audio, Sensor data..."></div>
+          <div class="fg"><label class="lbl">Output Format</label><input type="text" class="inp" id="f-out" placeholder="JSON, Text, PNG, Control commands..."></div>
+        </div>
+        <div class="fg"><label class="lbl">API Calls Included / Month</label><input type="number" class="inp" id="f-api" placeholder="10000" min="0"></div>
+      </div>
+
+      <!-- Section 3 -->
+      <div class="form-card">
+        <div class="fc-title">💰 Pricing</div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Price (USD) <span style="color:var(--red)">*</span></label><input type="number" class="inp" id="f-price" placeholder="0.00" min="0" step="0.01" required oninput="preview()"></div>
+          <div class="fg"><label class="lbl">Billing Cycle</label><select class="inp" id="f-billing" oninput="preview()"><option value="monthly">Monthly</option><option value="yearly">Yearly</option><option value="one-time">One-time</option><option value="per-call">Per API Call</option></select></div>
+        </div>
+        <div class="fg"><label class="lbl">License</label><select class="inp" id="f-lic"><option>Commercial</option><option>Enterprise</option><option>Professional</option><option>Research</option><option>Medical</option><option>Open Source</option></select></div>
+      </div>
+
+      <!-- Section 4 -->
+      <div class="form-card">
+        <div class="fc-title">👤 Seller Info</div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Seller / Company Name <span style="color:var(--red)">*</span></label><input type="text" class="inp" id="f-seller" placeholder="Your name or company" required></div>
+          <div class="fg"><label class="lbl">Contact Email <span style="color:var(--red)">*</span></label><input type="email" class="inp" id="f-email" placeholder="contact@yourcompany.com" required></div>
+        </div>
+        <label style="display:flex;align-items:center;gap:.75rem;cursor:pointer;font-size:.875rem;color:var(--t2)">
+          <input type="checkbox" id="f-agree" required style="width:16px;height:16px;accent-color:var(--violet)">
+          I agree to Smart World Market's <a href="#" style="color:var(--violet-l)">Terms</a> and <a href="#" style="color:var(--violet-l)">Seller Agreement</a>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;font-size:1rem">🚀 List on Universe Marketplace</button>
+    </form>
+  </div>
+
+  <!-- Preview + Benefits sidebar -->
+  <div>
+    <div class="preview-card">
+      <div class="preview-head">Live Preview</div>
+      <div class="preview-body">
+        <div class="preview-name" id="pv-name">Your Product Name</div>
+        <div class="preview-cat" id="pv-cat">Category</div>
+        <div style="font-size:.82rem;color:var(--t2);margin-bottom:1rem" id="pv-desc">Description appears here...</div>
+        <div class="preview-price" id="pv-price">$0<span style="font-size:.8rem;font-weight:400;color:var(--t3)">/mo</span></div>
+      </div>
+    </div>
+
+    <div style="background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-top:1.5rem">
+      <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:1.25rem">Why sell here?</div>
+      <div class="benefit"><div class="benefit-icon">🌍</div><div><div class="benefit-title">Universe Reach</div><div class="benefit-desc">Access 1.2M+ buyers across 150 countries</div></div></div>
+      <div class="benefit"><div class="benefit-icon">💳</div><div><div class="benefit-title">70% Revenue Share</div><div class="benefit-desc">Keep 70% of every sale, paid weekly</div></div></div>
+      <div class="benefit"><div class="benefit-icon">🤖</div><div><div class="benefit-title">AI-Powered Discovery</div><div class="benefit-desc">RAG search surfaces your product intelligently</div></div></div>
+      <div class="benefit"><div class="benefit-icon">🏪</div><div><div class="benefit-title">Dedicated Market Page</div><div class="benefit-desc">Auto-generated HTML page with sound intro</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Success modal -->
+<div class="success-modal" id="success-modal">
+  <div class="success-box">
+    <div style="font-size:4rem;margin-bottom:1rem">🎉</div>
+    <h2 style="margin-bottom:.75rem">Listed on the Universe!</h2>
+    <p style="color:var(--t2);margin-bottom:.5rem">Your product has been listed on Smart World Market.</p>
+    <div id="success-mid" style="background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);border-radius:var(--r);padding:.75rem 1.25rem;font-family:monospace;font-size:.875rem;color:var(--cyan);margin:1.25rem 0"></div>
+    <p style="font-size:.82rem;color:var(--t3);margin-bottom:2rem">Your dedicated market page is being generated now.</p>
+    <div style="display:flex;gap:.75rem;justify-content:center">
+      <a href="/vitrin" class="btn btn-primary">View Marketplace</a>
+      <a href="/" class="btn btn-ghost">Home</a>
+    </div>
+  </div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script>
+function preview(){
+  document.getElementById('pv-name').textContent=document.getElementById('f-name').value||'Your Product Name';
+  document.getElementById('pv-cat').textContent=document.getElementById('f-cat').value||'Category';
+  document.getElementById('pv-desc').textContent=document.getElementById('f-short').value||'Description appears here...';
+  const p=parseFloat(document.getElementById('f-price').value)||0;
+  const b=document.getElementById('f-billing').value;
+  const per=b==='one-time'?'':b==='per-call'?'/call':'/'+b.replace('ly','');
+  document.getElementById('pv-price').innerHTML=`$${p.toFixed(0)}<span style="font-size:.8rem;font-weight:400;color:var(--t3)">${per}</span>`;
+}
+
+document.getElementById('sell-form').addEventListener('submit',async function(e){
+  e.preventDefault();
+  const btn=this.querySelector('button[type=submit]');
+  btn.disabled=true;btn.textContent='Publishing to Universe...';
+  const data={
+    name:document.getElementById('f-name').value,
+    short_description:document.getElementById('f-short').value,
+    description:document.getElementById('f-desc').value,
+    category:document.getElementById('f-cat').value,
+    tags:document.getElementById('f-tags').value,
+    parameters:document.getElementById('f-params').value,
+    accuracy:document.getElementById('f-acc').value,
+    framework:document.getElementById('f-fw').value,
+    response_time:document.getElementById('f-rt').value,
+    input_format:document.getElementById('f-in').value,
+    output_format:document.getElementById('f-out').value,
+    api_calls:document.getElementById('f-api').value||10000,
+    price:document.getElementById('f-price').value,
+    billing:document.getElementById('f-billing').value,
+    license:document.getElementById('f-lic').value,
+    seller_name:document.getElementById('f-seller').value,
+  };
+  try{
+    const r=await apiFetch('/sell',{method:'POST',body:JSON.stringify(data)});
+    document.getElementById('success-mid').textContent='Market ID: '+r.market_id;
+    document.getElementById('success-modal').style.display='flex';
+  }catch{
+    btn.disabled=false;btn.textContent='🚀 List on Universe Marketplace';
+    toast('Error listing product. Please try again.','error');
+  }
+});
+</script>
+</body>
+</html>

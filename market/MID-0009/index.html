@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SentimentIQ · MID-0009 — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Back bar -->
+<div class="back-bar">
+  <a href="">← Smart World Market</a>
+  <a href="/vitrin">Vitrin</a>
+  <a href="/product/MID-0009">Full Details</a>
+  <span class="mid-pill">MID-0009</span>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb"></div>
+  <canvas id="c"></canvas>
+  <div class="hero-inner">
+    <div class="mid-badge"><div class="dot"></div> MARKET ID: MID-0009</div>
+    <div class="avatar">S</div>
+    <div class="cat-pill">Data Analysis</div>
+    <h1>SentimentIQ</h1>
+    <p class="hero-short">Multi-lingual sentiment and emotion analysis for 60+ languages</p>
+    <div class="hero-btns">
+      <button class="btn btn-sound" id="sound-btn" onclick="toggleSpeak()">🔊 Listen</button>
+      <button class="btn btn-buy" onclick="goBuy()">🚀 Buy — $39/monthly</button>
+      <a class="btn btn-outline" href="/product/MID-0009">Full Details</a>
+    </div>
+  </div>
+</section>
+
+<!-- Body -->
+<div class="body">
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box"><span class="sv">4.4</span><span class="sl">Rating (1567 reviews)</span></div>
+    <div class="stat-box"><span class="sv">340M</span><span class="sl">Parameters</span></div>
+    <div class="stat-box"><span class="sv">93.8%</span><span class="sl">Accuracy</span></div>
+    <div class="stat-box"><span class="sv">78,900</span><span class="sl">Downloads</span></div>
+  </div>
+
+  <!-- Tags -->
+  <div class="tags"><span class="tag">sentiment analysis</span><span class="tag">NLP</span><span class="tag">emotion</span><span class="tag">text classification</span><span class="tag">social media</span></div>
+
+  <!-- Description -->
+  <div class="sec">
+    <div class="sec-title">📖 About</div>
+    <p class="desc">SentimentIQ detects 27 distinct emotions including sarcasm and cultural nuances across 60 languages at 10,000 texts per second. Ideal for social media monitoring and brand analytics.</p>
+  </div>
+
+  <!-- Specs -->
+  <div class="sec">
+    <div class="sec-title">⚙️ Specifications</div>
+    <table class="specs">
+      <tr><td>Market ID</td><td>MID-0009</td></tr>
+      <tr><td>Category</td><td>Data Analysis</td></tr>
+      <tr><td>Parameters</td><td>340M</td></tr>
+      <tr><td>Accuracy</td><td>93.8%</td></tr>
+      <tr><td>Response Time</td><td>&lt; 30ms</td></tr>
+      <tr><td>API Calls/Month</td><td>1,000,000</td></tr>
+      <tr><td>License</td><td>Commercial</td></tr>
+    </table>
+  </div>
+
+  <!-- Seller -->
+  <div class="sec">
+    <div class="sec-title">👤 Seller</div>
+    <div class="seller-card">
+      <div class="s-av">EC</div>
+      <div>
+        <div class="s-name">EmotiCore</div>
+        <div class="s-unv">Community Seller</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy -->
+  <div class="buy-section">
+    <div class="price">$39</div>
+    <div class="per">per monthly · Commercial license</div>
+    <button class="buy-full" onclick="goBuy()">🔒 Purchase Access — SentimentIQ</button>
+  </div>
+</div>
+
+<footer>Smart World Market AI Marketplace · MID-0009 · World's First AI Model Marketplace · © 2026</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

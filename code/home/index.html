@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Smart World Market connects demand to the best existing AI, physical, biological, human, and space products — or reveals what is still missing.">
+  <title>Smart World Market — Search What Exists. Discover What Should Exist.</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#6d5dfc">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/code/shared/common.css">
+  <link rel="stylesheet" href="/code/home/style.css">
+</head>
+<body>
+
+<nav class="nav" aria-label="Primary navigation">
+  <a href="/" class="nav-logo" aria-label="Smart World Market home">
+    <div class="nav-logo-icon" aria-hidden="true">∞</div>
+    <span class="nav-logo-text">Smart World Market</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/vitrin">Market</a></li>
+    <li><a href="/compare">Compare</a></li>
+    <li><a href="/compose">Compose</a></li>
+    <li><a href="/search-page">AI Search</a></li>
+    <li><a href="/member">Dashboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/sell" class="btn btn-primary">List Supply</a>
+  </div>
+</nav>
+
+<main>
+  <section class="hero">
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-1" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-2" aria-hidden="true"></div>
+    <div class="hero-orb hero-orb-3" aria-hidden="true"></div>
+
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="live-dot"></span>
+        Demand → Supply Intelligence
+        <span class="badge-sep">•</span>
+        <span class="badge-live">LIVE</span>
+        <span class="badge-sep">•</span>
+        <span id="live-count">100</span> market objects
+      </div>
+
+      <h1 class="hero-title">
+        Search for <span class="hero-emphasis">anything.</span><br>
+        Find what exists — or what is missing.
+      </h1>
+
+      <p class="hero-copy">
+        Describe what you need in natural language. Smart World Market searches structured supply,
+        ranks the best match, and exposes unmet demand when no existing product is good enough.
+      </p>
+
+      <div class="hero-sub" aria-live="polite">
+        <span class="sub-static">Try:</span>
+        <span id="typing-text" class="typing-text"></span>
+      </div>
+
+      <div class="search-wrap" id="main-search-wrap">
+        <form id="search-form" onsubmit="handleSearch(event)" autocomplete="off">
+          <div class="search-bar" id="main-search-bar">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input type="text" id="search-inp" class="search-input"
+                   placeholder="I need an AI model that predicts soil moisture from NISAR..."
+                   autocomplete="off" aria-label="Search market demand">
+            <button type="submit" class="search-btn">Find Supply <span aria-hidden="true">→</span></button>
+          </div>
+        </form>
+        <div id="suggest-drop" class="suggest-drop"></div>
+      </div>
+
+      <div class="search-modes" aria-label="Search capabilities">
+        <span><b>01</b> Match existing supply</span>
+        <span><b>02</b> Compare alternatives</span>
+        <span><b>03</b> Detect missing supply</span>
+      </div>
+
+      <div class="compact-market-flow" aria-label="Demand to supply flow">
+        <div class="compact-flow-tile">
+          <span>01</span><strong>DEMAND</strong><small>What you want</small>
+        </div>
+        <div class="compact-flow-arrow">→</div>
+        <div class="compact-flow-tile compact-flow-ai">
+          <span>02</span><strong>MARKET AI</strong><small>Match · Gap · Create</small>
+        </div>
+        <div class="compact-flow-arrow">→</div>
+        <div class="compact-flow-tile">
+          <span>03</span><strong>SUPPLY</strong><small>What can satisfy it</small>
+        </div>
+      </div>
+
+      <div class="market-actions-strip" aria-label="Market actions">
+        <a class="market-action" href="/vitrin?action=buy"><b>↓</b><span>BUY</span><small>Own</small></a>
+        <a class="market-action" href="/vitrin?action=rent"><b>◷</b><span>RENT</span><small>Access</small></a>
+        <a class="market-action" href="/sell"><b>↑</b><span>SELL</span><small>Offer</small></a>
+        <a class="market-action" href="/exchange"><b>⇄</b><span>EXCHANGE</span><small>Trade</small></a>
+        <a class="market-action" href="/request"><b>＋</b><span>REQUEST</span><small>Demand</small></a>
+        <a class="market-action" href="/vitrin?action=use"><b>▶</b><span>USE</span><small>Run</small></a>
+      </div>
+
+      <div class="hero-ctas">
+        <a href="/vitrin" class="btn btn-primary btn-lg">Explore Market</a>
+        <a href="/compose" class="btn btn-glass btn-lg">Compose a Solution</a>
+        <a href="/sell" class="btn btn-glass btn-lg">Publish Supply</a>
+      </div>
+
+      <button class="ai-toggle" id="ai-toggle-btn" onclick="toggleAIChat()" aria-expanded="false" aria-controls="ai-panel">
+        <span aria-hidden="true">✦</span> Ask Market AI <span class="toggle-chevron">⌄</span>
+      </button>
+
+      <div class="ai-panel" id="ai-panel" hidden>
+        <div class="ai-panel-head">
+          <div>
+            <span class="eyebrow">MARKET COPILOT</span>
+            <h3>Turn a need into a market query</h3>
+          </div>
+          <span class="ai-status"><i></i> Ready</span>
+        </div>
+        <div class="ai-answer" id="ai-answer">
+          <div class="ai-welcome">
+            <div class="ai-avatar">AI</div>
+            <div>Tell me the outcome you want. I’ll translate it into requirements, find the closest supply, and show where the market still has a gap.</div>
+          </div>
+        </div>
+        <div id="ai-cards" class="grid g3 ai-card-grid"></div>
+        <div class="ai-input-row">
+          <input type="text" id="ai-input" class="inp" placeholder="Example: I need a model that forecasts stock price 10 days ahead" style="flex:1">
+          <button class="btn btn-primary" onclick="doAskAI()">Analyze</button>
+        </div>
+      </div>
+
+      <div class="cat-pills" id="cat-pills" aria-label="Market categories">
+        <button class="cat-pill active" onclick="filterCat('all',this)">All</button>
+        <button class="cat-pill" onclick="filterCat('Language Model',this)">Language AI</button>
+        <button class="cat-pill" onclick="filterCat('Image Generation',this)">Image AI</button>
+        <button class="cat-pill" onclick="filterCat('Code Generation',this)">Code</button>
+        <button class="cat-pill" onclick="filterCat('Voice & Audio',this)">Voice</button>
+        <button class="cat-pill" onclick="filterCat('Healthcare AI',this)">Health AI</button>
+        <button class="cat-pill" onclick="filterCat('Financial AI',this)">Finance</button>
+        <button class="cat-pill" onclick="filterCat('Biological',this)">Biological</button>
+        <button class="cat-pill" onclick="filterCat('Space Tech',this)">Space</button>
+        <button class="cat-pill" onclick="filterCat('Robotics',this)">Robotics</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="ticker-wrap" aria-label="Live market ticker">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+
+  <section class="proof-strip" aria-label="Marketplace statistics">
+    <div class="proof-intro">
+      <span class="eyebrow">ONE SEARCH LAYER</span>
+      <strong>Across digital, physical, biological and human supply.</strong>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-item"><span class="stat-n gt" data-target="100">0</span><span class="stat-l">Market Objects</span></div>
+      <div class="stat-item"><span class="stat-n gt" data-target="48000">0</span><span class="stat-l">Suppliers</span></div>
+      <div class="stat-item"><span class="stat-n gt" data-target="1247000">0</span><span class="stat-l">Demand Queries</span></div>
+      <div class="stat-item"><span class="stat-n gt" data-target="3892000">0</span><span class="stat-l">Matches</span></div>
+    </div>
+  </section>
+
+  <section class="stories-section">
+    <div class="section-header section-header-row">
+      <div>
+        <div class="sec-label">Featured Supply</div>
+        <h2>High-signal products worth exploring</h2>
+        <p>Curated market objects with strong adoption, capability, or strategic value.</p>
+      </div>
+      <a href="/vitrin" class="text-link">Browse marketplace →</a>
+    </div>
+    <div class="stories-row" id="stories-row"></div>
+  </section>
+
+  <section class="trending-section">
+    <div class="trending-header">
+      <div>
+        <div class="sec-label">Trending Now</div>
+        <h2>What demand is moving toward</h2>
+      </div>
+      <a href="/vitrin?sort=popular" class="btn btn-ghost btn-sm">View all</a>
+    </div>
+    <div class="grid g3" id="trending-grid"></div>
+  </section>
+
+  <section class="universe-map-section">
+    <div class="section-header section-header-row">
+      <div>
+        <div class="sec-label">Supply Map</div>
+        <h2>One market, multiple worlds</h2>
+        <p>Browse the inventory by domain and see where supply is dense — or still missing.</p>
+      </div>
+      <span class="section-index">02 / MARKET GRAPH</span>
+    </div>
+    <div class="universe-map-grid" id="universe-map-grid"></div>
+  </section>
+
+  <section class="feed-section">
+    <div class="section-header section-header-row">
+      <div>
+        <div class="sec-label" id="feed-label">All Supply</div>
+        <h2 id="feed-title">Market Feed</h2>
+        <p id="feed-subtitle">Explore products across the market.</p>
+      </div>
+      <span class="section-index">03 / INVENTORY</span>
+    </div>
+    <div class="grid g3" id="feed-grid"></div>
+    <div class="section-actions">
+      <a href="/vitrin" class="btn btn-outline btn-lg">Browse Full Inventory</a>
+      <a href="/compare" class="btn btn-ghost btn-lg">Compare Supply</a>
+    </div>
+  </section>
+
+  <section class="how-section">
+    <div class="section-header">
+      <div class="sec-label">Demand → Supply Engine</div>
+      <h2>Three steps from idea to market object</h2>
+      <p>Smart World Market is not only a catalog. It is a reasoning layer between what people want and what the world can provide.</p>
+    </div>
+    <div class="grid g3 how-grid">
+      <article class="how-card">
+        <div class="how-top"><span class="how-num">01</span><span class="how-icon">⌕</span></div>
+        <h3>Describe Demand</h3>
+        <p>Start with the outcome, not a product name. The system extracts constraints, domain, performance targets, budget and context.</p>
+      </article>
+      <article class="how-card">
+        <div class="how-top"><span class="how-num">02</span><span class="how-icon">◎</span></div>
+        <h3>Rank Supply</h3>
+        <p>Existing market objects are scored by fit, capability, evidence, cost and compatibility — then compared transparently.</p>
+      </article>
+      <article class="how-card how-card-accent">
+        <div class="how-top"><span class="how-num">03</span><span class="how-icon">✦</span></div>
+        <h3>Reveal the Gap</h3>
+        <p>If nothing satisfies the request, the unmet demand becomes a new opportunity that can be composed, funded, built and published.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <div class="cta-box">
+      <div class="cta-glow"></div>
+      <div class="cta-content">
+        <div class="cta-badge">SUPPLY THE MISSING PIECE</div>
+        <h2>Build what the market is already asking for.</h2>
+        <p>Publish an existing product — or turn an unmet demand signal into the next market object.</p>
+        <div class="cta-btns">
+          <a href="/sell" class="btn btn-white btn-lg">Publish Supply</a>
+          <a href="/compose" class="btn btn-lg cta-explore">Compose New Supply</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo footer-logo">
+        <div class="nav-logo-icon">∞</div>
+        <span class="nav-logo-text">Smart World Market</span>
+      </div>
+      <p>The demand-to-supply intelligence layer for digital, physical, biological, human and space markets.</p>
+    </div>
+    <div>
+      <div class="footer-h">Marketplace</div>
+      <ul class="footer-links">
+        <li><a href="/vitrin">Browse Market</a></li>
+        <li><a href="/sell">Publish Supply</a></li>
+        <li><a href="/compare">Compare</a></li>
+        <li><a href="/compose">Compose</a></li>
+        <li><a href="/search-page">AI Search</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">Account</div>
+      <ul class="footer-links">
+        <li><a href="/login">Sign In</a></li>
+        <li><a href="/login#register">Register</a></li>
+        <li><a href="/member">Dashboard</a></li>
+        <li><a href="/profile">Profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Smart World Market.</span>
+    <span>Search what exists. Discover what should exist.</span>
+  </div>
+</footer>
+
+<div id="live-notif" class="live-notif" hidden></div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/home/script.js"></script>
+</body>
+</html>

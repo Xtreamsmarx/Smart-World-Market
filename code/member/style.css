@@ -1,0 +1,83 @@
+/* Member dashboard styles */
+body { background:var(--space); }
+.member-layout { display:grid; grid-template-columns:260px 1fr; min-height:calc(100vh - 62px); margin-top:62px; }
+
+/* ── Sidebar ── */
+.member-sidebar {
+  background:rgba(13,6,33,.9); border-right:1px solid var(--border);
+  padding:1.5rem; display:flex; flex-direction:column; gap:1.5rem;
+  position:sticky; top:62px; height:calc(100vh - 62px); overflow-y:auto;
+}
+.user-card { text-align:center; padding-bottom:1.5rem; border-bottom:1px solid var(--border); }
+.user-avatar {
+  width:70px; height:70px; border-radius:50%; background:var(--grad);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.75rem; font-weight:900; color:#fff; margin:0 auto 1rem;
+  animation:glow-pulse 3s infinite;
+}
+.user-name  { font-weight:800; font-size:1rem; margin-bottom:.25rem; }
+.user-email { font-size:.78rem; color:var(--t3); }
+
+.side-nav { display:flex; flex-direction:column; gap:.2rem; flex:1; }
+.side-link {
+  display:flex; align-items:center; gap:.6rem; padding:.65rem .9rem;
+  border-radius:var(--r); font-size:.875rem; font-weight:600; color:var(--t2);
+  text-decoration:none; transition:all var(--t) var(--ease);
+}
+.side-link:hover, .side-link.active { background:var(--surf2); color:var(--t1); }
+.side-link.active { background:rgba(124,58,237,.2); color:var(--violet-l); border:1px solid rgba(124,58,237,.25); }
+
+.ollama-status {
+  display:flex; align-items:center; gap:.75rem; padding:1rem;
+  background:var(--surf); border-radius:var(--r); border:1px solid var(--border);
+}
+.status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+/* ── Main ── */
+.member-main { padding:2rem; overflow-y:auto; }
+.welcome-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:2rem; flex-wrap:wrap; gap:1rem; }
+
+.stat-card {
+  background:var(--surf); border:1px solid var(--border); border-radius:var(--r-lg);
+  padding:1.5rem; text-align:center; transition:all var(--t) var(--ease);
+}
+.stat-card:hover { border-color:var(--glow); transform:translateY(-2px); }
+.sc-icon { font-size:1.75rem; margin-bottom:.5rem; }
+.sc-val  { font-size:1.75rem; font-weight:900; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.sc-lbl  { font-size:.72rem; color:var(--t3); text-transform:uppercase; letter-spacing:.07em; margin-top:.25rem; }
+
+.section-block { margin-bottom:2.5rem; }
+.block-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem; }
+.block-header h3 { font-size:1.1rem; font-weight:800; }
+
+/* ── AI Chat ── */
+.ai-chat-box { background:var(--surf); border:1px solid var(--border); border-radius:var(--r-lg); overflow:hidden; }
+.chat-messages { padding:1.25rem; min-height:200px; max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:.75rem; }
+.chat-msg { display:flex; }
+.chat-msg.bot .chat-bubble {
+  background:var(--surf2); border:1px solid var(--border); border-radius:0 var(--r) var(--r) var(--r);
+  padding:.75rem 1rem; font-size:.875rem; line-height:1.7; max-width:85%;
+}
+.chat-msg.user { flex-direction:row-reverse; }
+.chat-msg.user .chat-bubble {
+  background:var(--grad); border-radius:var(--r) 0 var(--r) var(--r);
+  padding:.75rem 1rem; font-size:.875rem; line-height:1.7; max-width:85%; color:#fff;
+}
+.chat-input-row { display:flex; gap:.75rem; padding:1rem; border-top:1px solid var(--border); }
+
+/* ── Category grid ── */
+.cat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:1rem; }
+.cat-item {
+  background:var(--surf); border:1px solid var(--border); border-radius:var(--r-lg);
+  padding:1.25rem; text-align:center; cursor:pointer; text-decoration:none;
+  display:block; transition:all var(--t) var(--ease);
+}
+.cat-item:hover { border-color:var(--glow); transform:translateY(-2px); background:rgba(124,58,237,.1); }
+.cat-item .ci-icon { font-size:1.75rem; margin-bottom:.5rem; }
+.cat-item .ci-name { font-size:.78rem; font-weight:700; color:var(--t2); }
+.cat-item .ci-cnt  { font-size:.68rem; color:var(--t3); margin-top:.2rem; }
+
+@media(max-width:768px) {
+  .member-layout { grid-template-columns:1fr; }
+  .member-sidebar { position:static; height:auto; flex-direction:row; flex-wrap:wrap; }
+}

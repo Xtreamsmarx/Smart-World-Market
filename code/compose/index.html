@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Composer — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/compose/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/compare">Compare</a></li>
+    <li><a href="/compose" class="active">⚗️ Compose</a></li>
+  </ul>
+  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a><a href="/sell" class="btn btn-primary">+ List</a></div>
+</nav>
+
+<!-- HERO -->
+<section class="compose-hero">
+  <canvas id="bg-canvas"></canvas>
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="hero-inner">
+    <div class="sec-label">⚗️ AI Product Synthesizer</div>
+    <h1>Connect Universe Products<br>into <span class="gt">Something New</span></h1>
+    <p>Describe your goal — the AI finds, connects, and synthesizes products into a sellable, rentable, testable bundle</p>
+
+    <!-- Goal input -->
+    <div class="goal-input-wrap">
+      <div class="goal-bar">
+        <span class="goal-icon">✦</span>
+        <textarea id="goal-input" class="goal-textarea" placeholder="I want to build an autonomous medical diagnosis system that detects cancer from blood tests and imaging..." rows="2"></textarea>
+        <button class="synthesize-btn" id="synth-btn" onclick="synthesize()">
+          <span id="synth-label">⚗️ Synthesize</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Example prompts -->
+    <div class="example-prompts">
+      <span class="ep-label">Try:</span>
+      <button class="ep-btn" onclick="setGoal(this)">Autonomous medical diagnosis pipeline</button>
+      <button class="ep-btn" onclick="setGoal(this)">Real-time financial fraud detection system</button>
+      <button class="ep-btn" onclick="setGoal(this)">Self-driving warehouse robot with AI vision</button>
+      <button class="ep-btn" onclick="setGoal(this)">Climate monitoring and prediction platform</button>
+    </div>
+  </div>
+</section>
+
+<!-- LOADING STATE -->
+<div id="loading-state" class="loading-state" style="display:none">
+  <div class="loading-orbit">
+    <div class="orbit-ring"></div>
+    <div class="orbit-dot"></div>
+  </div>
+  <div class="loading-text" id="loading-text">Searching universe inventory...</div>
+  <div class="loading-steps" id="loading-steps"></div>
+</div>
+
+<!-- RESULT SECTION -->
+<div id="result-section" style="display:none">
+
+  <!-- Molecule canvas -->
+  <div class="molecule-section">
+    <div class="molecule-header">
+      <div>
+        <div class="sec-label">✦ Synthesis Result</div>
+        <h2 id="bundle-name" class="gt">Bundle Name</h2>
+        <p id="bundle-tagline" style="color:var(--t2);margin-top:.35rem"></p>
+      </div>
+      <div class="bundle-actions" id="bundle-actions"></div>
+    </div>
+
+    <div class="molecule-layout">
+      <!-- Canvas visualization -->
+      <div class="canvas-wrap">
+        <canvas id="mol-canvas"></canvas>
+        <div class="canvas-hint">Click any node to view product</div>
+      </div>
+
+      <!-- Bundle details -->
+      <div class="bundle-details">
+        <div class="bd-section">
+          <div class="bd-title">📋 Description</div>
+          <p id="bundle-desc" style="color:var(--t2);font-size:.9rem;line-height:1.75"></p>
+        </div>
+        <div class="bd-section">
+          <div class="bd-title">⚡ New Capabilities</div>
+          <ul id="bundle-caps" class="cap-list"></ul>
+        </div>
+        <div class="bd-section">
+          <div class="bd-title">🏗️ Architecture</div>
+          <p id="bundle-arch" style="color:var(--t2);font-size:.875rem;line-height:1.7;font-style:italic"></p>
+        </div>
+        <div class="bd-section">
+          <div class="bd-title">💡 Use Cases</div>
+          <div id="bundle-uses" class="use-cases"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products in bundle -->
+  <div class="bundle-products-section">
+    <div class="bp-header">
+      <div class="sec-label">✦ Included Products</div>
+      <h3>Products in This Bundle</h3>
+    </div>
+    <div class="grid g3" id="bundle-products-grid" style="max-width:1200px;margin:0 auto;padding:0 2rem"></div>
+  </div>
+
+  <!-- Pricing & Actions -->
+  <div class="pricing-section">
+    <div class="pricing-card">
+      <div class="pricing-card-inner">
+        <div>
+          <div class="sec-label" style="justify-content:center">💰 Bundle Pricing</div>
+          <div class="price-row">
+            <div class="price-item">
+              <div class="price-old" id="price-individual"></div>
+              <div class="price-main gt" id="price-bundle"></div>
+              <div class="price-label">Full Bundle / month</div>
+              <div class="price-save" id="price-save"></div>
+            </div>
+            <div class="price-divider">or</div>
+            <div class="price-item">
+              <div class="price-main" id="price-rent" style="color:#34d399"></div>
+              <div class="price-label">7-Day Rental</div>
+              <div style="font-size:.72rem;color:var(--t3)">Full API access, all models</div>
+            </div>
+          </div>
+        </div>
+        <div class="pricing-btns">
+          <button class="btn btn-primary btn-lg" style="min-width:200px" id="buy-bundle-btn">🚀 Buy Full Bundle</button>
+          <button class="btn btn-lg" style="min-width:200px;background:rgba(52,211,153,.18);border:1px solid rgba(52,211,153,.4);color:#34d399" id="rent-bundle-btn">🔑 Rent 7 Days</button>
+          <button class="btn btn-ghost btn-lg" id="test-bundle-btn">🧪 Test All Models</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Test all modal -->
+<div id="test-all-modal" class="test-all-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="test-all-box">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+      <h3>🧪 Test All Bundle Products</h3>
+      <button class="btn btn-ghost btn-sm" onclick="document.getElementById('test-all-modal').style.display='none'">✕ Close</button>
+    </div>
+    <div id="test-all-results"></div>
+  </div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/compose/script.js"></script>
+</body>
+</html>

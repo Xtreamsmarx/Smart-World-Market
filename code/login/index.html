@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sign In — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:var(--space);color:var(--t1);min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+.visual{position:relative;overflow:hidden;background:radial-gradient(ellipse at 30% 50%,#1a0533 0%,#050d1e 60%,var(--space) 100%);display:flex;align-items:center;justify-content:center;padding:3rem}
+#cv{position:absolute;inset:0;opacity:.45}
+.vis-content{position:relative;z-index:2;text-align:center;max-width:420px}
+.vis-logo{display:flex;align-items:center;gap:.6rem;justify-content:center;margin-bottom:2rem}
+.logo-icon{width:40px;height:40px;border-radius:11px;background:linear-gradient(135deg,#7c3aed,#2563eb);display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.logo-text{font-size:1.35rem;font-weight:900;background:linear-gradient(135deg,#7c3aed,#2563eb);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.vis-title{font-size:2.2rem;font-weight:900;line-height:1.15;margin-bottom:1rem}
+.vis-sub{color:rgba(255,255,255,.55);font-size:.925rem;line-height:1.7;margin-bottom:2rem}
+.vis-stats{display:flex;gap:2rem;justify-content:center;margin-bottom:2.5rem}
+.vs-item{text-align:center}
+.vs-n{font-size:1.6rem;font-weight:900;display:block;background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.vs-l{font-size:.68rem;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em}
+.float-circles{position:absolute;inset:0;pointer-events:none}
+.float-circle{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;animation:float 4s ease-in-out infinite}
+/* Right: form side */
+.form-side{background:rgba(9,4,24,.97);display:flex;flex-direction:column;justify-content:center;padding:3rem;position:relative;overflow:hidden}
+.form-side::before{content:'';position:absolute;top:-200px;right:-200px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,#7c3aed11,transparent 70%)}
+.back-link{color:var(--t2);font-size:.85rem;font-weight:600;margin-bottom:2.5rem;display:inline-flex;align-items:center;gap:.4rem;transition:color .25s;text-decoration:none}
+.back-link:hover{color:var(--t1)}
+.auth-tabs{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:4px;gap:4px;margin-bottom:2rem}
+.auth-tab{flex:1;padding:.6rem;background:none;border:none;border-radius:9px;font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--t2);transition:all .25s}
+.auth-tab.active{background:rgba(255,255,255,.1);color:var(--t1)}
+.form-group{margin-bottom:1.1rem;position:relative}
+.fl-label{position:absolute;left:1rem;top:50%;transform:translateY(-50%);font-size:.875rem;color:var(--t3);pointer-events:none;transition:all .22s;background:transparent;padding:0 .25rem}
+.fl-input:focus+.fl-label,.fl-input:not(:placeholder-shown)+.fl-label{top:0;font-size:.72rem;color:var(--violet-l);background:rgba(9,4,24,.97);font-weight:700}
+.fl-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--t1);padding:.85rem 1rem;border-radius:12px;font-size:.9rem;font-family:inherit;outline:none;transition:border-color .22s,box-shadow .22s}
+.fl-input:focus{border-color:var(--violet);box-shadow:0 0 0 3px rgba(124,58,237,.18)}
+.fl-input::placeholder{color:transparent}
+.pwd-wrap{position:relative}
+.pwd-toggle{position:absolute;right:.9rem;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--t3);font-size:.9rem;transition:color .2s}
+.pwd-toggle:hover{color:var(--t1)}
+.strength-bar{height:3px;border-radius:2px;background:rgba(255,255,255,.08);margin-top:.4rem;overflow:hidden}
+.strength-fill{height:100%;border-radius:2px;transition:width .4s,background .4s;width:0}
+.strength-text{font-size:.68rem;color:var(--t3);margin-top:.25rem}
+.remember-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;font-size:.82rem}
+.remember-row label{display:flex;align-items:center;gap:.45rem;cursor:pointer;color:var(--t2)}
+.remember-row a{color:var(--violet-l);text-decoration:none}
+.submit-btn{width:100%;padding:.9rem;background:linear-gradient(135deg,#7c3aed,#2563eb);border:none;color:#fff;border-radius:12px;font-size:.975rem;font-weight:800;cursor:pointer;font-family:inherit;transition:all .25s;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.submit-btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,.1);opacity:0;transition:opacity .2s}
+.submit-btn:hover::after{opacity:1}
+.submit-btn:disabled{opacity:.5;cursor:default}
+.divider{display:flex;align-items:center;gap:1rem;margin-bottom:1.25rem;font-size:.78rem;color:var(--t3)}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.social-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-bottom:1.5rem}
+.social-btn{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--t2);padding:.65rem .5rem;border-radius:10px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:.35rem;transition:all .22s}
+.social-btn:hover{border-color:rgba(255,255,255,.22);color:var(--t1);background:rgba(255,255,255,.09)}
+.msg-box{padding:.65rem 1rem;border-radius:10px;font-size:.82rem;font-weight:600;margin-bottom:1rem;display:none}
+.msg-box.error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);color:#f87171}
+.msg-box.success{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:#34d399}
+.security-note{text-align:center;font-size:.72rem;color:var(--t3)}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@media(max-width:768px){body{grid-template-columns:1fr}.visual{display:none}.form-side{padding:2rem 1.5rem;min-height:100vh;justify-content:center}}
+</style>
+</head>
+<body>
+
+<!-- LEFT: visual -->
+<div class="visual">
+  <canvas id="cv"></canvas>
+  <div class="vis-content">
+    <div class="vis-logo">
+      <div class="logo-icon">⚡</div>
+      <span class="logo-text">Smart World Market</span>
+    </div>
+    <h2 class="vis-title">Your Universe<br><span style="background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Awaits</span></h2>
+    <p class="vis-sub">Join the world's first marketplace for every type of product — AI, physical, biological, human, and space technology.</p>
+    <div class="vis-stats">
+      <div class="vs-item"><span class="vs-n" data-target="100">0</span><span class="vs-l">Products</span></div>
+      <div class="vs-item"><span class="vs-n" data-target="48000">0</span><span class="vs-l">Sellers</span></div>
+      <div class="vs-item"><span class="vs-n" data-target="1247000">0</span><span class="vs-l">Buyers</span></div>
+    </div>
+    <div class="float-circles" id="float-circles"></div>
+  </div>
+</div>
+
+<!-- RIGHT: form -->
+<div class="form-side">
+  <a href="/" class="back-link">← Back to Universe</a>
+  <div class="auth-tabs">
+    <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+    <button class="auth-tab" id="tab-reg" onclick="switchTab('register')">Create Account</button>
+  </div>
+  <div id="msg" class="msg-box"></div>
+
+  <!-- Login form -->
+  <form id="login-form" onsubmit="handleLogin(event)">
+    <div class="form-group">
+      <input type="email" class="fl-input" id="login-email" placeholder=" " required>
+      <label class="fl-label">Email address</label>
+    </div>
+    <div class="form-group pwd-wrap">
+      <input type="password" class="fl-input" id="login-pwd" placeholder=" " required style="padding-right:3rem">
+      <label class="fl-label">Password</label>
+      <button type="button" class="pwd-toggle" onclick="togglePwd('login-pwd',this)">👁️</button>
+    </div>
+    <div class="remember-row">
+      <label><input type="checkbox" id="remember"> Remember me</label>
+      <a href="#">Forgot password?</a>
+    </div>
+    <button type="submit" class="submit-btn" id="login-btn">Sign In to Universe →</button>
+    <div class="divider">or continue with</div>
+    <div class="social-grid">
+      <button type="button" class="social-btn" onclick="socialLogin('google')">🔍 Google</button>
+      <button type="button" class="social-btn" onclick="socialLogin('github')">🐙 GitHub</button>
+      <button type="button" class="social-btn" onclick="socialLogin('guest')">👤 Guest</button>
+    </div>
+    <div class="security-note">🔒 256-bit SSL · SOC2 · GDPR compliant</div>
+  </form>
+
+  <!-- Register form -->
+  <form id="register-form" style="display:none" onsubmit="handleRegister(event)">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:0">
+      <div class="form-group"><input type="text" class="fl-input" id="reg-first" placeholder=" " required><label class="fl-label">First name</label></div>
+      <div class="form-group"><input type="text" class="fl-input" id="reg-last"  placeholder=" " required><label class="fl-label">Last name</label></div>
+    </div>
+    <div class="form-group"><input type="email" class="fl-input" id="reg-email" placeholder=" " required><label class="fl-label">Work email</label></div>
+    <div class="form-group pwd-wrap">
+      <input type="password" class="fl-input" id="reg-pwd" placeholder=" " required minlength="6" style="padding-right:3rem" oninput="checkStrength(this.value)">
+      <label class="fl-label">Password (min 6 chars)</label>
+      <button type="button" class="pwd-toggle" onclick="togglePwd('reg-pwd',this)">👁️</button>
+      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      <div class="strength-text" id="strength-text"></div>
+    </div>
+    <div class="form-group">
+      <select class="fl-input" id="reg-type" style="cursor:pointer">
+        <option value="buyer">Buyer — discover & acquire products</option>
+        <option value="seller">Seller — list & monetize products</option>
+        <option value="both">Both — buy and sell</option>
+        <option value="researcher">Researcher — academic access</option>
+      </select>
+    </div>
+    <label style="display:flex;align-items:center;gap:.6rem;margin-bottom:1.25rem;font-size:.825rem;color:var(--t2);cursor:pointer">
+      <input type="checkbox" id="reg-agree" required style="width:15px;height:15px"> I agree to <a href="#" style="color:var(--violet-l)">Terms</a> & <a href="#" style="color:var(--violet-l)">Privacy Policy</a>
+    </label>
+    <button type="submit" class="submit-btn" id="reg-btn">Create Universe Account →</button>
+    <div class="divider">or sign up with</div>
+    <div class="social-grid">
+      <button type="button" class="social-btn" onclick="socialLogin('google')">🔍 Google</button>
+      <button type="button" class="social-btn" onclick="socialLogin('github')">🐙 GitHub</button>
+    </div>
+  </form>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script>
+// ── Canvas ──────────────────────────────────────────────────
+initParticles('cv', 65);
+
+// ── Float circles ───────────────────────────────────────────
+async function loadCircles() {
+  const data = await apiFetch('/search').catch(()=>({results:[]}));
+  const prods = (data.results||[]).slice(0,8);
+  const pos = [{top:'8%',left:'5%'},{top:'20%',right:'6%'},{top:'52%',left:'3%'},{top:'68%',right:'4%'},{bottom:'18%',left:'14%'},{bottom:'28%',right:'12%'},{top:'82%',left:'38%'},{top:'38%',left:'58%'}];
+  const container = document.getElementById('float-circles');
+  container.innerHTML = prods.map((p,i)=>{
+    const s = pos[i]||{top:'50%',left:'50%'};
+    const posStr = Object.entries(s).map(([k,v])=>`${k}:${v}`).join(';');
+    const sz = 36+Math.random()*24;
+    return `<div class="float-circle" style="${posStr};width:${sz}px;height:${sz}px;background:${p.gradient};animation-delay:${i*.45}s;animation-duration:${3.5+Math.random()*3}s;font-size:${sz*.45}px" title="${p.name}">${p.name[0]}</div>`;
+  }).join('');
+}
+loadCircles();
+
+// ── Password toggle ─────────────────────────────────────────
+function togglePwd(id, btn) {
+  const i=document.getElementById(id); i.type=i.type==='password'?'text':'password'; btn.textContent=i.type==='password'?'👁️':'🙈';
+}
+
+// ── Password strength ───────────────────────────────────────
+function checkStrength(v) {
+  const levels=[{t:'Too short',c:'#f87171',w:'15%'},{t:'Weak',c:'#fbbf24',w:'35%'},{t:'Fair',c:'#f59e0b',w:'55%'},{t:'Good',c:'#34d399',w:'80%'},{t:'Strong',c:'#10b981',w:'100%'}];
+  let s=0;
+  if(v.length>=6)s++; if(v.length>=10)s++; if(/[A-Z]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^a-zA-Z0-9]/.test(v))s++;
+  const l=levels[Math.min(s,4)];
+  document.getElementById('strength-fill').style.cssText=`width:${l.w};background:${l.c}`;
+  document.getElementById('strength-text').textContent=l.t; document.getElementById('strength-text').style.color=l.c;
+}
+
+// ── Tab switch ──────────────────────────────────────────────
+function switchTab(tab) {
+  document.getElementById('login-form').style.display=tab==='login'?'block':'none';
+  document.getElementById('register-form').style.display=tab==='register'?'block':'none';
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-reg').classList.toggle('active',tab==='register');
+  document.getElementById('msg').style.display='none';
+}
+if(location.hash==='#register') switchTab('register');
+
+// ── Show message ────────────────────────────────────────────
+function showMsg(text, type='error') {
+  const el=document.getElementById('msg'); el.textContent=text; el.className='msg-box '+type; el.style.display='block';
+}
+
+// ── Login ───────────────────────────────────────────────────
+async function handleLogin(e) {
+  e.preventDefault();
+  const btn=document.getElementById('login-btn'); btn.disabled=true; btn.textContent='Signing in...';
+  try {
+    const res=await apiFetch('/login-user',{method:'POST',body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-pwd').value})});
+    Auth.login({...res.user,avatar:res.user.avatar||res.user.name?.[0]?.toUpperCase()});
+    showMsg('✓ Welcome back, '+res.user.name+'!','success');
+    setTimeout(()=>location.href='/member',700);
+  } catch(err) {
+    showMsg(err.message?.includes('401')?'Incorrect email or password.':'Login failed. Please try again.');
+    btn.disabled=false; btn.textContent='Sign In to Universe →';
+  }
+}
+
+// ── Register ─────────────────────────────────────────────────
+async function handleRegister(e) {
+  e.preventDefault();
+  const name=(document.getElementById('reg-first').value+' '+document.getElementById('reg-last').value).trim();
+  const btn=document.getElementById('reg-btn'); btn.disabled=true; btn.textContent='Creating account...';
+  try {
+    const res=await apiFetch('/register',{method:'POST',body:JSON.stringify({name,email:document.getElementById('reg-email').value,password:document.getElementById('reg-pwd').value,account_type:document.getElementById('reg-type').value})});
+    Auth.login({...res.user,avatar:res.user.avatar||name[0]?.toUpperCase()});
+    showMsg('✓ Welcome, '+name+'! Account created.','success');
+    setTimeout(()=>location.href='/member',700);
+  } catch(err) {
+    showMsg(err.message?.includes('409')?'Email already registered. Sign in instead.':'Registration failed. Please try again.');
+    btn.disabled=false; btn.textContent='Create Universe Account →';
+  }
+}
+
+// ── Social login ─────────────────────────────────────────────
+function socialLogin(p) {
+  const names={google:'Universe Explorer',github:'Dev Pioneer',guest:'Guest Visitor'};
+  Auth.login({name:names[p],email:p+'@swm.demo',avatar:'🌍',provider:p,joined:new Date().toISOString()});
+  showMsg('✓ Signed in as '+names[p],'success');
+  setTimeout(()=>location.href='/member',700);
+}
+
+initCounters();
+</script>
+</body>
+</html>

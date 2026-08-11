@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Profile — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/profile/style.css">
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/member">Dashboard</a></li>
+    <li><a href="/profile" class="active">Profile</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/sell" class="btn btn-primary">+ List</a>
+  </div>
+</nav>
+
+<!-- Cover -->
+<div class="profile-cover">
+  <canvas id="cv"></canvas>
+  <div class="cover-overlay"></div>
+</div>
+
+<!-- Profile info -->
+<div class="profile-info-bar">
+  <div class="profile-inner">
+    <div class="profile-avatar-wrap">
+      <div class="profile-avatar" id="profile-av">🌍</div>
+      <div class="verified-ring" title="Universe Member"></div>
+    </div>
+    <div class="profile-meta">
+      <h2 id="profile-name">Universe Explorer</h2>
+      <div style="color:var(--t2);font-size:.875rem" id="profile-email">universe@Smart World Market.com</div>
+      <div style="display:flex;gap:.75rem;margin-top:.5rem;flex-wrap:wrap">
+        <span class="badge badge-v">🌍 Universe Member</span>
+        <span class="badge badge-c" id="account-type-badge">Explorer</span>
+        <span class="badge badge-g" id="joined-badge">Member since 2026</span>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div class="ps-item"><span class="ps-n">0</span><span class="ps-l">Listings</span></div>
+      <div class="ps-item"><span class="ps-n">0</span><span class="ps-l">Purchases</span></div>
+      <div class="ps-item"><span class="ps-n">5.0</span><span class="ps-l">Rating</span></div>
+    </div>
+    <div style="display:flex;gap:.75rem;margin-left:auto">
+      <button class="btn btn-ghost" onclick="editProfile()">✏️ Edit Profile</button>
+      <a href="/sell" class="btn btn-primary">+ List Product</a>
+    </div>
+  </div>
+</div>
+
+<!-- Tabs -->
+<div class="profile-body">
+  <div class="profile-tabs">
+    <button class="ptab active" onclick="switchPTab('listed',this)">📦 Listed (0)</button>
+    <button class="ptab" onclick="switchPTab('featured',this)">⭐ Featured Products</button>
+    <button class="ptab" onclick="switchPTab('about',this)">👤 About</button>
+  </div>
+
+  <div id="ptab-listed" class="ptab-panel active">
+    <div class="no-listings">
+      <div style="font-size:3rem;margin-bottom:1rem">📦</div>
+      <h3>No listings yet</h3>
+      <p style="color:var(--t2);margin:.5rem 0 1.5rem;font-size:.9rem">List your first product and reach buyers across the universe.</p>
+      <a href="/sell" class="btn btn-primary btn-lg">+ List Your First Product</a>
+    </div>
+  </div>
+
+  <div id="ptab-featured" class="ptab-panel" style="display:none">
+    <div class="grid g3" id="featured-grid"></div>
+  </div>
+
+  <div id="ptab-about" class="ptab-panel" style="display:none">
+    <div class="about-section">
+      <div class="about-card">
+        <h4>About This Account</h4>
+        <p id="about-text" style="color:var(--t2);line-height:1.8;margin-top:.75rem">Universe Explorer at Smart World Market. Passionate about discovering extraordinary products from across all of existence — from cutting-edge AI models to biological breakthroughs and space technology.</p>
+      </div>
+      <div class="about-card">
+        <h4>Universe Passport</h4>
+        <div class="passport-grid" id="passport-grid">
+          <div class="passport-item">🧠 Language AI Explorer</div>
+          <div class="passport-item">🧬 Biotech Pioneer</div>
+          <div class="passport-item">🚀 Space Tech Enthusiast</div>
+          <div class="passport-item">🌍 Global Marketplace Member</div>
+          <div class="passport-item">🔒 Verified Universe Citizen</div>
+          <div class="passport-item">⚡ Smart World Market Early Adopter</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <h4>Edit Profile</h4>
+        <div class="form-group" style="margin-top:1rem"><label class="lbl">Display Name</label><input type="text" class="inp" id="edit-name" placeholder="Your name"></div>
+        <div class="form-group" style="margin-top:.75rem"><label class="lbl">Bio</label><textarea class="inp" id="edit-bio" rows="3" placeholder="Tell the universe about yourself..." style="resize:vertical"></textarea></div>
+        <button class="btn btn-primary" style="margin-top:.75rem" onclick="saveProfile()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/profile/script.js"></script>
+</body>
+</html>

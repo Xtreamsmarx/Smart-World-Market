@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checkout — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<style>
+body{background:var(--space);padding-top:62px}
+.pay-wrap{max-width:960px;margin:0 auto;padding:3rem 2rem;display:grid;grid-template-columns:1fr 360px;gap:3rem;align-items:start}
+.pay-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:2rem;margin-bottom:1.5rem}
+.pay-title{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:1.25rem}
+.pm-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
+.pm-btn{background:var(--surf2);border:2px solid var(--border);border-radius:var(--r);padding:.75rem;text-align:center;cursor:pointer;transition:all var(--t) var(--ease);font-size:.8rem;font-weight:700;color:var(--t2)}
+.pm-btn.active{border-color:var(--violet);background:rgba(124,58,237,.12);color:var(--violet-l)}
+.pm-icon{font-size:1.5rem;display:block;margin-bottom:.3rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+.fg{margin-bottom:1rem}
+.order-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;position:sticky;top:80px}
+.order-head{padding:1.5rem;border-bottom:1px solid var(--border)}
+.order-body{padding:1.5rem}
+.ol{display:flex;justify-content:space-between;padding:.7rem 0;border-bottom:1px solid var(--border);font-size:.875rem;color:var(--t2)}
+.ol:last-child{border:none}
+.ol-total{display:flex;justify-content:space-between;padding-top:1rem;font-size:1.1rem;font-weight:800}
+.sec-badges{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:1.25rem}
+.sec-badge{display:flex;align-items:center;gap:.35rem;font-size:.72rem;color:var(--t3)}
+.success-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;align-items:center;justify-content:center}
+.success-box{background:var(--nebula);border:1px solid var(--border);border-radius:var(--r-xl);padding:3rem;max-width:480px;width:90%;text-align:center}
+.checkmark{width:80px;height:80px;background:linear-gradient(135deg,#059669,#10b981);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 1.5rem;animation:glow-pulse 2s infinite}
+@media(max-width:768px){.pay-wrap{grid-template-columns:1fr}.order-card{position:static}.pm-btns,.fr{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/vitrin">Vitrin</a></li></ul>
+  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a></div>
+</nav>
+
+<div class="pay-wrap" id="pay-wrap" style="display:none">
+  <!-- Left: Payment form -->
+  <div>
+    <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:2rem;font-size:.8rem;color:var(--t3)">
+      <a href="/" style="color:var(--t3)">Home</a><span>›</span>
+      <a id="bc-product" href="#" style="color:var(--t3)"></a><span>›</span>
+      <span style="color:var(--t1)">Checkout</span>
+    </div>
+    <h2 style="margin-bottom:2rem">Complete Your Purchase</h2>
+
+    <div class="pay-card">
+      <div class="pay-title">💳 Payment Method</div>
+      <div class="pm-btns">
+        <div class="pm-btn active" onclick="selectPM(this,'card')"><span class="pm-icon">💳</span>Credit Card</div>
+        <div class="pm-btn" onclick="selectPM(this,'paypal')"><span class="pm-icon">🅿️</span>PayPal</div>
+        <div class="pm-btn" onclick="selectPM(this,'crypto')"><span class="pm-icon">₿</span>Crypto</div>
+      </div>
+
+      <div id="card-form">
+        <div class="fg"><label class="lbl">Card Number</label><input type="text" class="inp" id="c-num" placeholder="1234 5678 9012 3456" maxlength="19" oninput="fmtCard(this)"></div>
+        <div class="fg"><label class="lbl">Cardholder Name</label><input type="text" class="inp" id="c-name" placeholder="John Doe"></div>
+        <div class="fr">
+          <div class="fg"><label class="lbl">Expiry</label><input type="text" class="inp" id="c-exp" placeholder="MM / YY" maxlength="7" oninput="fmtExp(this)"></div>
+          <div class="fg"><label class="lbl">CVC</label><input type="text" class="inp" id="c-cvc" placeholder="123" maxlength="4"></div>
+        </div>
+      </div>
+      <div id="paypal-form" style="display:none;text-align:center;padding:1.5rem"><div style="font-size:3rem;margin-bottom:.75rem">🅿️</div><p style="color:var(--t2);font-size:.875rem">You'll be redirected to PayPal to complete payment securely.</p></div>
+      <div id="crypto-form" style="display:none;text-align:center;padding:1.5rem">
+        <div style="font-size:3rem;margin-bottom:.75rem">₿</div>
+        <p style="color:var(--t2);font-size:.875rem;margin-bottom:1rem">Send Bitcoin, Ethereum, or USDC:</p>
+        <div style="background:var(--nebula);border-radius:var(--r);padding:.875rem;font-family:monospace;font-size:.78rem;color:var(--cyan);word-break:break-all">bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh</div>
+      </div>
+    </div>
+
+    <div class="pay-card">
+      <div class="pay-title">🏠 Billing Information</div>
+      <div class="fr">
+        <div class="fg"><label class="lbl">First Name</label><input type="text" class="inp" id="b-first" placeholder="John"></div>
+        <div class="fg"><label class="lbl">Last Name</label><input type="text" class="inp" id="b-last" placeholder="Doe"></div>
+      </div>
+      <div class="fg"><label class="lbl">Email Address</label><input type="email" class="inp" id="b-email" placeholder="john@example.com"></div>
+      <div class="fg"><label class="lbl">Country</label>
+        <select class="inp"><option>United States</option><option>United Kingdom</option><option>Germany</option><option>France</option><option>Canada</option><option>Australia</option><option>Japan</option><option>Other</option></select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;font-size:1.1rem" id="pay-btn" onclick="processPayment()">🔒 Pay Now</button>
+    <div class="sec-badges">
+      <div class="sec-badge">🔒 SSL Encrypted</div>
+      <div class="sec-badge">🛡️ PCI Compliant</div>
+      <div class="sec-badge">↩️ 30-day Refund</div>
+      <div class="sec-badge">✓ Verified Sellers</div>
+    </div>
+  </div>
+
+  <!-- Order summary -->
+  <div class="order-card">
+    <div class="order-head">
+      <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:1rem">Order Summary</div>
+      <div style="display:flex;gap:1rem;align-items:flex-start">
+        <div id="o-av" style="width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:900;color:#fff;flex-shrink:0"></div>
+        <div>
+          <div id="o-name" style="font-weight:800;margin-bottom:.25rem"></div>
+          <div id="o-cat" style="font-size:.78rem;color:var(--t2)"></div>
+          <div id="o-seller" style="font-size:.72rem;color:var(--t3);margin-top:.4rem"></div>
+        </div>
+      </div>
+    </div>
+    <div class="order-body">
+      <div class="ol"><span id="o-product-name"></span><span id="o-price-line"></span></div>
+      <div class="ol"><span>API calls/month</span><span id="o-api"></span></div>
+      <div class="ol"><span>License</span><span id="o-lic"></span></div>
+      <div class="ol"><span>Billing</span><span id="o-billing"></span></div>
+      <div class="ol"><span>Tax</span><span>$0.00</span></div>
+      <div class="ol-total"><span>Total</span><span class="gt" id="o-total"></span></div>
+      <div style="margin-top:1.25rem;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);border-radius:var(--r);padding:.875rem;font-size:.78rem;color:#34d399">
+        ✓ Full API access · Instant delivery · Cancel anytime
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pay-loading" style="text-align:center;padding:6rem;color:var(--t2)"><div style="font-size:2rem;animation:spin 1s linear infinite">⚡</div><div style="margin-top:1rem">Loading...</div></div>
+
+<!-- Success -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-box">
+    <div class="checkmark">✓</div>
+    <h2 style="margin-bottom:.75rem">Payment Successful!</h2>
+    <p style="color:var(--t2);margin-bottom:.5rem">Your purchase was successful.</p>
+    <p style="color:var(--t3);margin-bottom:.5rem;font-size:.85rem">Transaction: <span id="txn-id" style="color:var(--cyan);font-family:monospace"></span></p>
+    <p style="color:var(--t3);margin-bottom:2rem;font-size:.82rem">API credentials sent to your email.</p>
+    <div style="display:flex;gap:.75rem;justify-content:center">
+      <a href="/" class="btn btn-primary">Back to Marketplace</a>
+      <a href="/vitrin" class="btn btn-ghost">Explore More</a>
+    </div>
+  </div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script>
+const mid = location.pathname.split('/payment/')[1];
+
+async function load() {
+  const data = await apiFetch('/product/'+mid).catch(()=>null);
+  document.getElementById('pay-loading').style.display='none';
+  if (!data||!data.product) { document.body.innerHTML+='<div style="text-align:center;padding:4rem;color:var(--red)">Product not found.</div>'; return; }
+  const p = data.product;
+  document.title = 'Buy ' + p.name + ' — Smart World Market';
+  document.getElementById('bc-product').textContent = p.name;
+  document.getElementById('bc-product').href = '/product/'+p.market_id;
+  const av = document.getElementById('o-av');
+  av.textContent = p.name[0]; av.style.background = p.gradient;
+  document.getElementById('o-name').textContent = p.name;
+  document.getElementById('o-cat').textContent = p.category;
+  document.getElementById('o-seller').textContent = 'by ' + p.seller;
+  document.getElementById('o-product-name').textContent = p.name;
+  document.getElementById('o-price-line').textContent = '$'+p.price.toFixed(2);
+  document.getElementById('o-api').textContent = fmtNum(p.api_calls_per_month)+'/mo';
+  document.getElementById('o-lic').textContent = p.license;
+  document.getElementById('o-billing').textContent = p.billing||'monthly';
+  document.getElementById('o-total').textContent = '$'+p.price.toFixed(2);
+  document.getElementById('pay-btn').textContent = '🔒 Pay $'+p.price.toFixed(2);
+  document.getElementById('pay-wrap').style.display='grid';
+}
+
+function selectPM(el, mode) {
+  document.querySelectorAll('.pm-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('card-form').style.display = mode==='card'?'block':'none';
+  document.getElementById('paypal-form').style.display = mode==='paypal'?'block':'none';
+  document.getElementById('crypto-form').style.display = mode==='crypto'?'block':'none';
+}
+
+function fmtCard(i){let v=i.value.replace(/\D/g,'').slice(0,16);i.value=v.replace(/(\d{4})(?=\d)/g,'$1 ')}
+function fmtExp(i){let v=i.value.replace(/\D/g,'').slice(0,4);if(v.length>2)v=v.slice(0,2)+' / '+v.slice(2);i.value=v}
+
+async function processPayment() {
+  const btn=document.getElementById('pay-btn');
+  btn.disabled=true; btn.textContent='⏳ Processing...';
+  const r=await apiFetch('/payment',{method:'POST',body:JSON.stringify({product_id:mid})}).catch(()=>({success:false}));
+  if(r.success){document.getElementById('txn-id').textContent=r.transaction_id;document.getElementById('success-overlay').style.display='flex';}
+  else{btn.disabled=false;btn.textContent='🔒 Pay Now';toast('Payment failed. Please try again.','error');}
+}
+
+load();
+</script>
+</body>
+</html>

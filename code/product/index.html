@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Product — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<style>
+body{background:var(--space);padding-top:62px}
+.p-hero{position:relative;padding:3rem 0;overflow:hidden;border-bottom:1px solid var(--border)}
+.p-hero::before{content:'';position:absolute;inset:0;opacity:.06}
+.p-hero::after{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;border-radius:50%;filter:blur(100px);opacity:.1}
+.p-inner{max-width:1100px;margin:0 auto;padding:0 2rem;display:grid;grid-template-columns:1fr 340px;gap:3rem;position:relative;z-index:2}
+.p-head{display:flex;align-items:flex-start;gap:1.25rem;margin-bottom:1.5rem}
+.p-av{width:80px;height:80px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:2.25rem;font-weight:900;color:#fff;flex-shrink:0;box-shadow:0 20px 60px rgba(0,0,0,.4);animation:float 4s ease-in-out infinite}
+.p-title{font-size:2rem;font-weight:900;margin-bottom:.35rem;line-height:1.15}
+.p-qstats{display:flex;gap:1.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.qs{display:flex;align-items:center;gap:.4rem;font-size:.875rem;color:var(--t2)}
+.qs strong{color:var(--t1)}
+.buy-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;position:sticky;top:80px}
+.buy-price{font-size:2.5rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.25rem}
+.buy-features .bf{display:flex;align-items:center;gap:.75rem;padding:.55rem 0;font-size:.875rem;color:var(--t2);border-bottom:1px solid var(--border)}
+.buy-features .bf:last-child{border:none}
+.p-body-wrap{max-width:1100px;margin:0 auto;padding:2.5rem 2rem}
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:2rem;overflow-x:auto}
+.tab-btn{background:none;border:none;border-bottom:2px solid transparent;padding:.875rem 1.4rem;color:var(--t2);font-size:.9rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all var(--t) var(--ease)}
+.tab-btn:hover{color:var(--t1)}
+.tab-btn.active{color:var(--violet-l);border-bottom-color:var(--violet)}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.specs-tbl{width:100%;border-collapse:collapse}
+.specs-tbl tr{border-bottom:1px solid var(--border)}
+.specs-tbl td{padding:.8rem 1rem;font-size:.875rem}
+.specs-tbl td:first-child{color:var(--t3);width:40%}
+.specs-tbl td:last-child{color:var(--t1);font-weight:600}
+.review-card{background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1rem}
+.related-section{border-top:1px solid var(--border);padding:3rem 2rem;max-width:1100px;margin:0 auto}
+.feat-card{display:flex;gap:.75rem;padding:.75rem;background:var(--surf);border:1px solid var(--border);border-radius:var(--r);margin-bottom:.75rem;align-items:flex-start}
+.feat-icon{font-size:1.25rem;flex-shrink:0;width:36px;text-align:center}
+.feat-title{font-weight:700;font-size:.875rem;margin-bottom:.2rem}
+.feat-desc{font-size:.78rem;color:var(--t2)}
+@media(max-width:900px){.p-inner{grid-template-columns:1fr}.buy-card{position:static}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/vitrin">Vitrin</a></li><li><a href="/search-page">Search</a></li></ul>
+  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a><a href="/sell" class="btn btn-primary">+ List</a></div>
+</nav>
+
+<!-- Product hero (populated by JS) -->
+<div class="p-hero" id="p-hero" style="display:none"></div>
+
+<!-- Tabs + content -->
+<div class="p-body-wrap" id="p-body" style="display:none">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="tab('overview',this)">Overview</button>
+    <button class="tab-btn" onclick="tab('specs',this)">Specifications</button>
+    <button class="tab-btn" onclick="tab('reviews',this)">Reviews</button>
+    <button class="tab-btn" onclick="tab('api',this)">API Docs</button>
+    <button class="tab-btn" onclick="openTest()" style="color:#34d399;border-bottom-color:transparent">🧪 Test Playground</button>
+  </div>
+  <div class="tab-panel active" id="tab-overview"><div id="p-overview"></div></div>
+  <div class="tab-panel" id="tab-specs"><div id="p-specs"></div></div>
+  <div class="tab-panel" id="tab-reviews"><div id="p-reviews"></div></div>
+  <div class="tab-panel" id="tab-api"><div id="p-api"></div></div>
+</div>
+<div class="related-section" id="p-related" style="display:none">
+  <h3 style="margin-bottom:1.5rem">Related Products</h3>
+  <div class="grid g4" id="related-grid"></div>
+</div>
+
+<!-- Loading -->
+<div id="p-loading" style="text-align:center;padding:6rem;color:var(--t2)">
+  <div style="font-size:2rem;margin-bottom:1rem;animation:spin 1s linear infinite">⚡</div>
+  <div>Loading product...</div>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script>
+const mid = location.pathname.split('/product/')[1];
+
+function heroInner(p) {
+  return `
+    <div style="display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start">
+      <div>
+        <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap">
+          <a href="/vitrin" style="color:rgba(255,255,255,.5);font-size:.8rem">← All Products</a>
+          <span style="color:var(--t3)">›</span>
+          <span class="badge badge-c">${p.category}</span>
+          <span class="mid-pill"><span class="dot"></span>${p.market_id}</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;flex-wrap:wrap">
+          ${p.seller_verified?'<span class="badge badge-g">✓ Verified</span>':''}
+          ${p.featured?'<span class="badge badge-v">⭐ Featured</span>':''}
+        </div>
+        <h1 style="font-size:2rem;font-weight:900;margin-bottom:.4rem;line-height:1.15">${p.name}</h1>
+        <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap">
+          <div><span class="stars">★★★★★</span> <strong>${p.rating}</strong> <span style="font-size:.8rem;color:var(--t3)">(${fmtNum(p.review_count)} reviews)</span></div>
+          <span style="font-size:.85rem;color:var(--t2)">${fmtNum(p.downloads)} downloads</span>
+        </div>
+        <p style="color:rgba(255,255,255,.72);font-size:1rem;line-height:1.7;max-width:560px;margin-bottom:1.25rem">${p.short_description}</p>
+        <div style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:1.25rem">
+          <div style="font-size:.875rem;color:var(--t2)">🧠 <strong style="color:var(--t1)">${p.parameters}</strong> Params</div>
+          <div style="font-size:.875rem;color:var(--t2)">🎯 <strong style="color:var(--t1)">${p.accuracy}</strong> Accuracy</div>
+          <div style="font-size:.875rem;color:var(--t2)">⚡ <strong style="color:var(--t1)">${p.response_time}</strong></div>
+          <div style="font-size:.875rem;color:var(--t2)">📞 <strong style="color:var(--t1)">${fmtNum(p.api_calls_per_month)}</strong>/mo</div>
+        </div>
+        <div id="p-tags" class="pc-tags">${(p.tags||[]).map(t=>`<a href="/vitrin?q=${t}" class="tag">${t}</a>`).join('')}</div>
+      </div>
+
+      <div class="buy-card" style="background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;position:sticky;top:80px">
+        <div style="font-size:2.5rem;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.2rem">${p.price?'$'+p.price.toFixed(0):'Free'}</div>
+        <div style="color:var(--t3);font-size:.8rem;margin-bottom:1.25rem">per ${p.billing||'month'} · ${p.license} license</div>
+        <div style="margin-bottom:1.25rem">
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.875rem;color:var(--t2);border-bottom:1px solid var(--border)"><span style="color:var(--green)">✓</span>${fmtNum(p.api_calls_per_month)} API calls/month</div>
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.875rem;color:var(--t2);border-bottom:1px solid var(--border)"><span style="color:var(--green)">✓</span>${p.response_time} response time</div>
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.875rem;color:var(--t2)"><span style="color:var(--green)">✓</span>${p.license} license · Cancel anytime</div>
+        </div>
+        <a href="/payment/${p.market_id}" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:.5rem;display:flex">🚀 Buy Full Access</a>
+        <button class="btn btn-lg" style="width:100%;justify-content:center;margin-bottom:.5rem;background:rgba(16,185,129,.18);border:1px solid rgba(16,185,129,.4);color:#34d399" onclick="openTest()">🧪 Test Model Free</button>
+        <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:1.25rem" onclick="speakProduct('${p.name}. ${(p.short_description||'').replace(/'/g,"\\'")}')">🔊 Listen</button>
+        <div style="padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.75rem">
+          <div style="width:38px;height:38px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;color:#fff;flex-shrink:0">${(p.seller_avatar||p.seller?.[0]||'S').slice(0,2)}</div>
+          <div><div style="font-weight:700;font-size:.875rem">${p.seller}</div><div style="font-size:.72rem;color:var(--t3)">Seller</div></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function tab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+async function load() {
+  const data = await apiFetch('/product/'+mid).catch(()=>null);
+  if (!data || !data.product) { document.getElementById('p-loading').innerHTML='<div style="font-size:3rem">😢</div><div style="color:var(--red);margin-top:1rem">Product not found.</div>'; return; }
+  const p = data.product;
+  _testProduct = p;  // make product available to test playground
+  document.title = p.name + ' — Smart World Market';
+
+  // Hero — image + overlay + buy card
+  const hero = document.getElementById('p-hero');
+  const imgUrl = `/product/${p.market_id}/image.svg`;
+  hero.style.cssText = 'display:block;position:relative;overflow:hidden;border-bottom:1px solid var(--border)';
+  hero.innerHTML = `
+    <img src="${imgUrl}" alt="${p.name}" style="width:100%;height:300px;object-fit:cover;display:block" onerror="this.style.display='none'">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.1) 0%,rgba(5,5,16,1) 100%)"></div>
+    <div style="position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 2rem 2.5rem;margin-top:-100px">
+      ${heroInner(p)}
+    </div>`;
+
+  // Remove stale element references (hero is now fully in heroInner)
+  document.getElementById('p-loading').style.display = 'none';
+  document.getElementById('p-body').style.display = 'block';
+
+  // Tabs
+  document.getElementById('p-overview').innerHTML = `<div style="max-width:720px">
+    <h3 style="margin-bottom:1rem">About ${p.name}</h3>
+    <p style="color:var(--t2);line-height:1.85;margin-bottom:2rem">${p.description}</p>
+    <div class="grid g2" style="gap:.9rem">
+      <div class="feat-card"><div class="feat-icon">⚡</div><div><div class="feat-title">Lightning Fast</div><div class="feat-desc">${p.response_time} average response</div></div></div>
+      <div class="feat-card"><div class="feat-icon">🎯</div><div><div class="feat-title">High Accuracy</div><div class="feat-desc">${p.accuracy} on benchmarks</div></div></div>
+      <div class="feat-card"><div class="feat-icon">🔌</div><div><div class="feat-title">Easy Integration</div><div class="feat-desc">REST API + comprehensive docs</div></div></div>
+      <div class="feat-card"><div class="feat-icon">🔒</div><div><div class="feat-title">Enterprise Secure</div><div class="feat-desc">SOC2 compliant, encrypted</div></div></div>
+    </div></div>`;
+
+  const sp = p.specs||{};
+  document.getElementById('p-specs').innerHTML = `<div style="max-width:680px">
+    <h3 style="margin-bottom:1.5rem">Technical Specifications</h3>
+    <table class="specs-tbl">
+      <tr><td>Market ID</td><td>${p.market_id}</td></tr>
+      <tr><td>Parameters</td><td>${p.parameters}</td></tr>
+      <tr><td>Accuracy</td><td>${p.accuracy}</td></tr>
+      <tr><td>Framework</td><td>${sp.framework||'N/A'}</td></tr>
+      <tr><td>Input Format</td><td>${sp.input||'N/A'}</td></tr>
+      <tr><td>Output Format</td><td>${sp.output||'N/A'}</td></tr>
+      <tr><td>Response Time</td><td>${p.response_time}</td></tr>
+      <tr><td>API Calls/Month</td><td>${fmtNum(p.api_calls_per_month)}</td></tr>
+      <tr><td>GPU Required</td><td>${sp.gpu_required?'Yes':'No (CPU inference)'}</td></tr>
+      <tr><td>License</td><td>${p.license}</td></tr>
+      <tr><td>Seller</td><td>${p.seller}${p.seller_verified?' ✓':''}</td></tr>
+      <tr><td>Listed</td><td>${(p.created_at||'').slice(0,10)}</td></tr>
+    </table></div>`;
+
+  const revs = data.reviews||[];
+  document.getElementById('p-reviews').innerHTML = `<div style="max-width:680px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+      <h3>Reviews (${revs.length||p.review_count})</h3>
+      <button class="btn btn-outline btn-sm" onclick="showAddReview()">+ Add Review</button>
+    </div>
+    ${revs.length ? revs.map(r=>`<div class="review-card"><div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem"><div style="width:36px;height:36px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff;flex-shrink:0">${r.initials||'?'}</div><div><div style="font-weight:700">${r.author}</div><div style="display:flex;align-items:center;gap:.5rem"><span class="stars">${'★'.repeat(Math.round(r.rating))}</span><span style="font-size:.75rem;color:var(--t3)">${(r.created_at||'').slice(0,10)}</span></div></div></div><p style="color:var(--t2);font-size:.875rem;line-height:1.7">${r.review_text||''}</p></div>`).join('') :
+    `<div style="text-align:center;padding:2rem;background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);color:var(--t2)">No reviews yet. Be the first!</div>`}
+    <div id="add-review-form" style="display:none;background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;margin-top:1rem">
+      <h4 style="margin-bottom:1rem">Write a Review</h4>
+      <div class="fg" style="margin-bottom:.75rem"><label class="lbl">Your Name</label><input type="text" class="inp" id="rv-author" placeholder="Your name"></div>
+      <div class="fg" style="margin-bottom:.75rem"><label class="lbl">Rating</label><select class="inp" id="rv-rating"><option value="5">★★★★★ (5)</option><option value="4">★★★★☆ (4)</option><option value="3">★★★☆☆ (3)</option><option value="2">★★☆☆☆ (2)</option><option value="1">★☆☆☆☆ (1)</option></select></div>
+      <div class="fg" style="margin-bottom:1rem"><label class="lbl">Review</label><textarea class="inp" id="rv-text" rows="3" placeholder="Share your experience..."></textarea></div>
+      <div style="display:flex;gap:.75rem"><button class="btn btn-primary btn-sm" onclick="submitReview()">Submit</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById('add-review-form').style.display='none'">Cancel</button></div>
+    </div>
+  </div>`;
+
+  document.getElementById('p-api').innerHTML = `<div style="max-width:680px">
+    <h3 style="margin-bottom:1rem">API Documentation</h3>
+    <p style="color:var(--t2);margin-bottom:1.5rem">Access ${p.name} through the Smart World Market unified API.</p>
+    <div style="background:var(--nebula);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;font-family:monospace;font-size:.82rem;line-height:2;margin-bottom:1.5rem;overflow-x:auto">
+      <div style="color:var(--t3)"># Install SDK</div>
+      <div style="color:#34d399">pip install Smart World Market-sdk</div><br>
+      <div style="color:var(--t3)"># Quick start</div>
+      <div><span style="color:#a78bfa">from</span> Smart World Market <span style="color:#a78bfa">import</span> Client</div>
+      <div>client = Client(api_key=<span style="color:#fbbf24">"YOUR_KEY"</span>)</div>
+      <div>result = client.models.invoke(<span style="color:#fbbf24">"${p.market_id}"</span>, input=<span style="color:#fbbf24">"Your input"</span>)</div>
+      <div>print(result.output)</div>
+    </div>
+    <a href="/payment/${p.market_id}" class="btn btn-primary">Get API Key →</a>
+  </div>`;
+
+  // Related
+  if (data.related?.length) {
+    document.getElementById('related-grid').innerHTML = data.related.map(r=>`<a href="/product/${r.market_id}" class="card" style="text-decoration:none"><div class="pc-top" style="background:${r.gradient}"></div><div class="pc-body"><div style="font-weight:700;margin-bottom:.25rem">${r.name}</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:.75rem">${r.short_description?.slice(0,60)}...</div><div style="display:flex;justify-content:space-between"><span style="font-weight:700">$${r.price}/mo</span><span style="color:#f59e0b">★ ${r.rating}</span></div></div></a>`).join('');
+    document.getElementById('p-related').style.display='block';
+  }
+
+  document.getElementById('p-loading').style.display='none';
+  hero.style.display='block';
+  document.getElementById('p-body').style.display='block';
+}
+
+function showAddReview() { document.getElementById('add-review-form').style.display='block'; }
+
+async function submitReview() {
+  const data={product_id:mid,author:document.getElementById('rv-author').value,rating:document.getElementById('rv-rating').value,text:document.getElementById('rv-text').value};
+  await apiFetch('/review',{method:'POST',body:JSON.stringify(data)}).catch(()=>{});
+  toast('Review submitted!'); load();
+}
+
+load();
+</script>
+
+<!-- ═══════════════ TEST PLAYGROUND MODAL ═══════════════════════ -->
+<style>
+.test-overlay{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9998;display:none;align-items:flex-end;justify-content:center;padding:1rem;backdrop-filter:blur(12px)}
+.test-overlay.open{display:flex}
+.test-modal{background:var(--nebula);border:1px solid rgba(16,185,129,.35);border-radius:var(--r-xl);width:100%;max-width:820px;max-height:90vh;display:flex;flex-direction:column;animation:fadeUp .35s var(--ease) both;box-shadow:0 0 60px rgba(16,185,129,.15)}
+.tm-header{display:flex;align-items:center;gap:1rem;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);flex-shrink:0}
+.tm-av{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:900;color:#fff;flex-shrink:0}
+.tm-title{font-weight:800;font-size:1rem;margin-bottom:.15rem}
+.tm-sub{font-size:.72rem;color:var(--t3)}
+.tm-close{margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--surf2);border:1px solid var(--border);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:all var(--t) var(--ease);flex-shrink:0}
+.tm-close:hover{background:rgba(239,68,68,.2);color:#f87171;border-color:rgba(239,68,68,.4)}
+.tm-body{display:grid;grid-template-columns:1fr 1fr;flex:1;overflow:hidden}
+.tm-panel{display:flex;flex-direction:column;padding:1.25rem}
+.tm-panel+.tm-panel{border-left:1px solid var(--border)}
+.tm-label{font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.tm-label .tm-dot{width:8px;height:8px;border-radius:50%}
+.tm-textarea{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--t1);padding:.85rem 1rem;border-radius:var(--r);font-size:.875rem;font-family:'Inter',monospace;outline:none;resize:none;min-height:160px;line-height:1.65;transition:border-color var(--t) var(--ease)}
+.tm-textarea:focus{border-color:rgba(16,185,129,.5);box-shadow:0 0 0 2px rgba(16,185,129,.12)}
+.tm-textarea::placeholder{color:var(--t3)}
+.examples-row{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.6rem}
+.ex-chip{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--t2);padding:.2rem .65rem;border-radius:var(--r-f);font-size:.72rem;cursor:pointer;transition:all var(--t) var(--ease)}
+.ex-chip:hover{border-color:rgba(16,185,129,.45);color:#34d399}
+.tm-actions{display:flex;align-items:center;gap:.5rem;margin-top:.75rem}
+.run-btn{background:linear-gradient(135deg,#059669,#10b981);border:none;color:#fff;padding:.6rem 1.4rem;border-radius:var(--r-f);font-size:.875rem;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:.5rem;transition:all var(--t) var(--ease)}
+.run-btn:hover{transform:translateY(-1px);box-shadow:0 4px 15px rgba(16,185,129,.45)}
+.run-btn:disabled{opacity:.5;cursor:default;transform:none}
+.clear-btn{background:transparent;border:1px solid var(--border);color:var(--t2);padding:.6rem 1rem;border-radius:var(--r-f);font-size:.875rem;cursor:pointer;font-family:inherit;transition:all var(--t) var(--ease)}
+.clear-btn:hover{color:var(--t1)}
+.tm-output-area{flex:1;background:rgba(0,0,0,.25);border:1px solid var(--border);border-radius:var(--r);padding:.85rem 1rem;font-size:.82rem;line-height:1.75;overflow-y:auto;min-height:160px;color:var(--t2);font-family:'Inter',monospace;position:relative;white-space:pre-wrap;word-break:break-word}
+.tm-output-area.running{border-color:rgba(16,185,129,.35);box-shadow:0 0 0 2px rgba(16,185,129,.1)}
+.tm-cursor{display:inline-block;width:2px;height:1em;background:var(--cyan);margin-left:1px;animation:blink 1s infinite;vertical-align:text-bottom}
+.tm-meta{font-size:.72rem;color:var(--t3);margin-top:.6rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.tm-meta-item{display:flex;align-items:center;gap:.3rem}
+.tm-copy-btn{background:transparent;border:1px solid var(--border);color:var(--t2);padding:.2rem .65rem;border-radius:var(--r-f);font-size:.72rem;cursor:pointer;font-family:inherit;margin-left:auto;transition:all var(--t) var(--ease)}
+.tm-copy-btn:hover{color:var(--t1);border-color:rgba(255,255,255,.2)}
+.tm-demo-warn{font-size:.7rem;color:rgba(16,185,129,.6);background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:var(--r);padding:.45rem .75rem;margin-top:.5rem;display:flex;align-items:center;gap:.4rem}
+.img-canvas-out{width:100%;height:160px;border-radius:var(--r);display:block}
+.waveform-out{width:100%;height:60px}
+.code-out{font-family:monospace;font-size:.78rem;background:rgba(0,0,0,.3);padding:.85rem 1rem;border-radius:var(--r);border:1px solid var(--border);overflow-x:auto;white-space:pre;color:#e2e8f0}
+.code-kw{color:#a78bfa}.code-fn{color:#34d399}.code-str{color:#fbbf24}.code-cmt{color:#64748b}
+@media(max-width:640px){.tm-body{grid-template-columns:1fr}.tm-panel+.tm-panel{border-left:none;border-top:1px solid var(--border)}.test-overlay{align-items:flex-end;padding:0}.test-modal{border-radius:var(--r-xl) var(--r-xl) 0 0;max-height:95vh}}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+</style>
+
+<div class="test-overlay" id="test-overlay" onclick="if(event.target===this)closeTest()">
+  <div class="test-modal" id="test-modal">
+    <!-- Header -->
+    <div class="tm-header">
+      <div class="tm-av" id="tm-av"></div>
+      <div>
+        <div class="tm-title" id="tm-title">Test Playground</div>
+        <div class="tm-sub" id="tm-sub"></div>
+      </div>
+      <button class="tm-close" onclick="closeTest()">✕</button>
+    </div>
+    <!-- Body -->
+    <div class="tm-body">
+      <!-- Left: Input -->
+      <div class="tm-panel">
+        <div class="tm-label">
+          <div class="tm-dot" style="background:#34d399"></div> Input
+        </div>
+        <textarea class="tm-textarea" id="tm-input" placeholder="Loading..."></textarea>
+        <div class="examples-row" id="tm-examples"></div>
+        <div class="tm-actions">
+          <button class="run-btn" id="tm-run-btn" onclick="runTest()">▶ Run Test</button>
+          <button class="clear-btn" onclick="clearTest()">Clear</button>
+          <span id="tm-run-status" style="font-size:.75rem;color:var(--t3)"></span>
+        </div>
+      </div>
+      <!-- Right: Output -->
+      <div class="tm-panel">
+        <div class="tm-label" style="justify-content:space-between">
+          <span style="display:flex;align-items:center;gap:.5rem"><div class="tm-dot" style="background:var(--cyan)"></div> Output</span>
+          <button class="tm-copy-btn" onclick="copyOutput()">📋 Copy</button>
+        </div>
+        <div class="tm-output-area" id="tm-output">
+          <span style="color:var(--t3);font-family:inherit">Run a test to see the model output here...</span>
+        </div>
+        <div class="tm-meta" id="tm-meta"></div>
+        <div class="tm-demo-warn">⚠️ Demo mode — responses are AI-simulated based on model specifications</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Test Playground ──────────────────────────────────────────
+let _testProduct = null, _streaming = false;
+
+const TEST_CONFIGS = {
+  'Language Model': {
+    ph: 'Enter your prompt... e.g. "Summarize the benefits of AI in healthcare"',
+    examples: ['Summarize the key benefits of AI in healthcare','Write a professional email declining a meeting request','Explain quantum computing to a 10-year-old','List 5 innovative uses of large language models'],
+    run: (p, input) => genLLMResponse(p, input),
+  },
+  'Image Generation': {
+    ph: 'Describe the image you want... e.g. "A futuristic city at sunset with neon lights"',
+    examples: ['Futuristic AI research lab with blue neon lights','Abstract neural network visualization in purple and cyan','Photorealistic robot hand shaking a human hand','Space station above Earth at golden hour'],
+    run: (p, input) => genImageResponse(p, input),
+  },
+  'Code Generation': {
+    ph: 'Describe what code you need... e.g. "Python function to sort a list of dictionaries by key"',
+    examples: ['Python function to detect anomalies in time series data','REST API endpoint for user authentication with JWT','SQL query to find top 10 customers by revenue','React component for a real-time data dashboard'],
+    run: (p, input) => genCodeResponse(p, input),
+  },
+  'Voice & Audio': {
+    ph: 'Enter text to synthesize... e.g. "Welcome to Smart World Market, the universe marketplace"',
+    examples: ['Welcome to Smart World Market, the universe marketplace','The quick brown fox jumps over the lazy dog','AI is transforming every industry on Earth and beyond','Hello world, this is a test of the voice synthesis system'],
+    run: (p, input) => genAudioResponse(p, input),
+  },
+  'Computer Vision': {
+    ph: 'Describe what you want to detect... e.g. "Detect objects in a warehouse security camera feed"',
+    examples: ['Detect all objects in a warehouse security camera','Analyze medical scan for anomalies and regions of interest','Identify vehicles and pedestrians in traffic footage','Count products on retail shelves and detect empty spaces'],
+    run: (p, input) => genVisionResponse(p, input),
+  },
+  'Healthcare AI': {
+    ph: 'Describe the patient case or symptoms... e.g. "Patient presents with chest pain and shortness of breath"',
+    examples: ['Patient 67F, chest pain radiating to left arm, shortness of breath, elevated troponin','Chest X-ray showing opacity in right lower lobe, patient febrile 38.9°C','Blood glucose 280 mg/dL, HbA1c 9.2%, patient reports polyuria and polydipsia','Skin lesion 8mm, asymmetric, multiple colors, irregular border'],
+    run: (p, input) => genHealthResponse(p, input),
+  },
+  'Financial AI': {
+    ph: 'Enter ticker, scenario, or portfolio... e.g. "Analyze AAPL for next 30 days"',
+    examples: ['Analyze AAPL stock outlook for Q3 2026','Risk assessment for a 60/40 equity/bond portfolio','Predict BTC/USD movement given current macro conditions','Detect potential fraud patterns in transaction stream'],
+    run: (p, input) => genFinanceResponse(p, input),
+  },
+  'Robotics': {
+    ph: 'Enter the task for the robot... e.g. "Pick up box A from shelf 3 and place at conveyor belt"',
+    examples: ['Pick up the red box from shelf 3 and place it on conveyor belt B','Navigate to waypoint (12.5, 8.2, 0.0) avoiding dynamic obstacles','Execute precision welding sequence on joint J-47','Harvest ripe tomatoes in row 12, avoid unripe ones'],
+    run: (p, input) => genRoboticsResponse(p, input),
+  },
+  'Cybersecurity': {
+    ph: 'Describe the security scenario... e.g. "Analyze this network traffic for threats"',
+    examples: ['Analyze network traffic: 10,000 SYN packets from 192.168.1.x in 60 seconds','Scan this Python code snippet for SQL injection vulnerabilities','Evaluate phishing email: "Your account requires immediate verification"','Assess risk of CVE-2026-1234 for our Apache 2.4.51 installation'],
+    run: (p, input) => genSecurityResponse(p, input),
+  },
+  'Data Analysis': {
+    ph: 'Describe your data or analysis goal... e.g. "Sales data for 1000 stores over 3 years"',
+    examples: ['Find patterns in monthly sales data for 1000 retail stores','Detect anomalies in IoT sensor readings from manufacturing line','Forecast demand for 500 SKUs for next quarter','Analyze customer churn signals from 50,000 user records'],
+    run: (p, input) => genDataResponse(p, input),
+  },
+};
+// Default config for unlisted categories
+const DEFAULT_CONFIG = {
+  ph: 'Enter your input...',
+  examples: ['Test with sample data','Run a basic inference','Evaluate model performance'],
+  run: (p, input) => genDefaultResponse(p, input),
+};
+
+function getCfg(p) {
+  return TEST_CONFIGS[p.category] || DEFAULT_CONFIG;
+}
+
+function openTest() {
+  const p = _testProduct;
+  if (!p) return;
+  const cfg = getCfg(p);
+  const av = document.getElementById('tm-av');
+  av.textContent = p.name[0]; av.style.background = p.gradient;
+  document.getElementById('tm-title').textContent = p.name;
+  document.getElementById('tm-sub').textContent = `${p.market_id} · ${p.category} · ${p.accuracy} accuracy · ${p.response_time}`;
+  document.getElementById('tm-input').placeholder = cfg.ph;
+  document.getElementById('tm-input').value = '';
+  document.getElementById('tm-examples').innerHTML = cfg.examples.slice(0,3).map(e=>
+    `<span class="ex-chip" onclick="document.getElementById('tm-input').value='${e.replace(/'/g,"\\'")}'">${e.slice(0,40)}${e.length>40?'...':''}</span>`
+  ).join('');
+  document.getElementById('tm-output').innerHTML = '<span style="color:var(--t3);font-family:inherit">Run a test to see model output...</span>';
+  document.getElementById('tm-meta').innerHTML = '';
+  document.getElementById('test-overlay').classList.add('open');
+}
+function closeTest() { document.getElementById('test-overlay').classList.remove('open'); }
+function clearTest() { document.getElementById('tm-input').value=''; document.getElementById('tm-output').innerHTML='<span style="color:var(--t3);font-family:inherit">Run a test to see model output...</span>'; document.getElementById('tm-meta').innerHTML=''; }
+function copyOutput() {
+  const text = document.getElementById('tm-output').innerText;
+  navigator.clipboard.writeText(text).then(()=>toast('Output copied!')).catch(()=>{});
+}
+
+async function runTest() {
+  if (_streaming) return;
+  const p = _testProduct;
+  const input = document.getElementById('tm-input').value.trim();
+  if (!input) { document.getElementById('tm-input').focus(); return; }
+
+  _streaming = true;
+  const btn = document.getElementById('tm-run-btn');
+  btn.disabled = true; btn.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite"></div> Running...';
+  document.getElementById('tm-run-status').textContent = 'Sending request...';
+  document.getElementById('tm-meta').innerHTML = '';
+
+  const out = document.getElementById('tm-output');
+  out.innerHTML = ''; out.classList.add('running');
+
+  const startMs = Date.now();
+
+  // Simulate network latency
+  const latency = Math.floor(Math.random()*200+50);
+  await new Promise(r=>setTimeout(r, latency));
+
+  document.getElementById('tm-run-status').textContent = 'Processing...';
+
+  const cfg = getCfg(p);
+  await cfg.run(p, input);
+
+  const elapsed = Date.now()-startMs;
+  out.classList.remove('running');
+  document.getElementById('tm-meta').innerHTML = `
+    <span class="tm-meta-item" style="color:var(--green)">✓ Success</span>
+    <span class="tm-meta-item">⚡ ${elapsed}ms</span>
+    <span class="tm-meta-item">🎯 ${p.accuracy} confidence</span>
+    <span class="tm-meta-item">🧠 ${p.parameters}</span>`;
+  document.getElementById('tm-run-status').textContent = '';
+  btn.disabled=false; btn.innerHTML='▶ Run Test';
+  _streaming=false;
+}
+
+// ── Streaming text helper ────────────────────────────────────
+async function streamText(text, containerId='tm-output', delay=18) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = '';
+  const cursor = document.createElement('span');
+  cursor.className='tm-cursor'; el.appendChild(cursor);
+  for (const ch of text) {
+    const t = document.createTextNode(ch);
+    el.insertBefore(t, cursor);
+    await new Promise(r=>setTimeout(r, delay + (ch==='\n'?80:0)));
+  }
+  cursor.remove();
+}
+
+// ── Mock response generators ─────────────────────────────────
+async function genLLMResponse(p, input) {
+  const responses = [
+    `Based on my analysis using ${p.parameters} parameters:\n\n${input.length > 30 ? input.slice(0,30)+'...' : input}\n\nKey insights:\n\n1. The primary consideration here involves semantic understanding across multiple dimensions of the query.\n\n2. Drawing from my training data, there are ${Math.floor(Math.random()*5+3)} relevant patterns that apply.\n\n3. The recommended approach would be to structure the response in three phases: initial assessment, deep analysis, and actionable recommendations.\n\nConclusion: With ${p.accuracy} confidence, I recommend focusing on the core objective while maintaining contextual awareness throughout the process.`,
+    `Processing your request through ${p.name}...\n\n✦ Summary\nYour query relates to a multi-faceted topic with several key dimensions worth exploring.\n\n✦ Analysis\nBased on ${p.parameters} parameters trained on comprehensive datasets, the most relevant response considers both immediate and long-term implications.\n\n✦ Recommendation\nThe optimal approach involves ${Math.floor(Math.random()*3+2)} sequential steps:\n→ Step 1: Establish baseline context\n→ Step 2: Apply domain-specific reasoning\n→ Step 3: Generate structured output\n\n✦ Confidence: ${p.accuracy}`,
+  ];
+  await streamText(responses[Math.floor(Math.random()*responses.length)]);
+}
+
+async function genImageResponse(p, input) {
+  const el = document.getElementById('tm-output');
+  el.innerHTML = '';
+  // Generative canvas art
+  const canvas = document.createElement('canvas');
+  canvas.className='img-canvas-out'; canvas.width=600; canvas.height=300;
+  el.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const colors = ['#7c3aed','#2563eb','#06b6d4','#10b981','#f59e0b'];
+  const bg = ctx.createLinearGradient(0,0,600,300);
+  bg.addColorStop(0,'#0d0d1a'); bg.addColorStop(1,'#1a0533');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,600,300);
+  for(let i=0;i<80;i++){
+    ctx.beginPath();
+    const x=Math.random()*600,y=Math.random()*300,r=Math.random()*40+5;
+    const g=ctx.createRadialGradient(x,y,0,x,y,r);
+    const c=colors[Math.floor(Math.random()*colors.length)];
+    g.addColorStop(0,c+'88'); g.addColorStop(1,c+'00');
+    ctx.fillStyle=g; ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  }
+  // Add text
+  ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.font='bold 13px Inter,sans-serif'; ctx.textAlign='center';
+  ctx.fillText(`Generated: "${input.slice(0,50)}"`, 300, 270);
+  ctx.fillStyle='rgba(255,255,255,0.4)'; ctx.font='11px Inter,sans-serif';
+  ctx.fillText(`${p.name} · ${p.accuracy} CLIP Score · 2048×2048px`, 300, 288);
+
+  const meta = document.createElement('div');
+  meta.style.cssText='font-size:.78rem;color:var(--t2);margin-top:.75rem;line-height:1.7';
+  meta.innerHTML=`✦ Resolution: 2048×2048px<br>✦ Style: AI-generated artwork<br>✦ Format: PNG, JPEG available<br>✦ Prompt understood: "${input.slice(0,60)}"`;
+  el.appendChild(meta);
+}
+
+async function genCodeResponse(p, input) {
+  const el = document.getElementById('tm-output');
+  const lang = input.toLowerCase().includes('sql')?'sql':input.toLowerCase().includes('react')||input.toLowerCase().includes('javascript')?'javascript':'python';
+  const code = lang==='python'?
+`<span class="code-cmt"># Generated by ${p.name} · ${p.parameters} · ${p.accuracy}</span>
+<span class="code-kw">import</span> <span class="code-fn">numpy</span> as np
+<span class="code-kw">from</span> <span class="code-fn">typing</span> <span class="code-kw">import</span> List, Optional
+
+<span class="code-kw">def</span> <span class="code-fn">process_data</span>(data: List[float], threshold: Optional[float] = <span class="code-fn">None</span>) -> dict:
+    <span class="code-str">"""
+    Process input data with intelligent filtering.
+    Accuracy: ${p.accuracy} | Parameters: ${p.parameters}
+    """</span>
+    arr = np.array(data)
+    result = {
+        <span class="code-str">'mean'</span>:      float(np.mean(arr)),
+        <span class="code-str">'std'</span>:       float(np.std(arr)),
+        <span class="code-str">'anomalies'</span>: np.where(np.abs(arr - arr.mean()) > 2*arr.std())[0].tolist(),
+        <span class="code-str">'confidence'</span>: <span class="code-str">'${p.accuracy}'</span>
+    }
+    <span class="code-kw">return</span> result
+
+<span class="code-cmt"># Example usage</span>
+data = [1.2, 3.4, 2.1, 15.7, 2.8, 3.1, 2.9]
+output = <span class="code-fn">process_data</span>(data)
+<span class="code-fn">print</span>(<span class="code-str">f"Result: {output}"</span>)`:
+`<span class="code-cmt">/* Generated by ${p.name} */</span>
+<span class="code-kw">async function</span> <span class="code-fn">analyzeData</span>(input) {
+  <span class="code-kw">const</span> response = <span class="code-kw">await</span> <span class="code-fn">fetch</span>(<span class="code-str">'/api/analyze'</span>, {
+    method: <span class="code-str">'POST'</span>,
+    headers: { <span class="code-str">'Content-Type'</span>: <span class="code-str">'application/json'</span> },
+    body: <span class="code-fn">JSON.stringify</span>({ input, model: <span class="code-str">'${p.market_id}'</span> })
+  });
+  <span class="code-kw">const</span> { result, confidence } = <span class="code-kw">await</span> response.<span class="code-fn">json</span>();
+  <span class="code-kw">return</span> { result, confidence: <span class="code-str">'${p.accuracy}'</span> };
+}`;
+  el.innerHTML=`<div class="code-out">${code}</div>
+<div style="font-size:.75rem;color:var(--t2);margin-top:.5rem">✦ Language: ${lang} · ✦ Lines: ${code.split('\n').length} · ✦ ${p.accuracy} accuracy</div>`;
+}
+
+async function genAudioResponse(p, input) {
+  const el = document.getElementById('tm-output');
+  el.innerHTML='';
+  // Waveform visualization
+  const svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+  svg.setAttribute('viewBox','0 0 600 80'); svg.className='waveform-out';
+  const bars = 120;
+  for(let i=0;i<bars;i++){
+    const h=Math.abs(Math.sin(i*.4)*30+Math.random()*20)+5;
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x',i*5); rect.setAttribute('y',(80-h)/2);
+    rect.setAttribute('width',3); rect.setAttribute('height',h);
+    rect.setAttribute('rx',1.5);
+    rect.setAttribute('fill',`hsl(${160+i*1.2},80%,55%)`);
+    svg.appendChild(rect);
+  }
+  el.appendChild(svg);
+  const info=document.createElement('div');
+  info.style.cssText='font-size:.78rem;color:var(--t2);margin-top:.75rem;line-height:1.8';
+  const words=input.split(' ').length;
+  info.innerHTML=`✦ Voice synthesized: "${input.slice(0,50)}"<br>✦ Duration: ~${(words*0.4).toFixed(1)}s · Format: WAV, MP3<br>✦ Similarity: ${p.accuracy} · Language: Auto-detected<br>✦ Emotion: Neutral, Rate: 0.93x`;
+  el.appendChild(info);
+}
+
+async function genVisionResponse(p, input) {
+  const objs=['person','vehicle','laptop','chair','bottle','phone','monitor','bag'];
+  const detected=objs.slice(0,Math.floor(Math.random()*4+2)).map(o=>({
+    label:o,conf:(Math.random()*.2+0.78).toFixed(3),bbox:[Math.floor(Math.random()*400),Math.floor(Math.random()*300),Math.floor(Math.random()*200+50),Math.floor(Math.random()*150+50)]
+  }));
+  const json=JSON.stringify({model:p.market_id,accuracy:p.accuracy,inference_time:`${Math.floor(Math.random()*15+3)}ms`,detections:detected},null,2);
+  await streamText(json, 'tm-output', 8);
+}
+
+async function genHealthResponse(p, input) {
+  const score=(Math.random()*.3+.7).toFixed(2);
+  const conds=['Pneumonia (right lower lobe)','Cardiac ischemia — requires urgent evaluation','Type 2 Diabetes Mellitus','Malignant melanoma — Stage I'];
+  const cond=conds[Math.floor(Math.random()*conds.length)];
+  const resp=`CLINICAL ANALYSIS REPORT
+━━━━━━━━━━━━━━━━━━━━━━━
+Model: ${p.name} (${p.market_id})
+Accuracy: ${p.accuracy} | Analyzed: ${new Date().toLocaleTimeString()}
+
+FINDINGS
+━━━━━━━━
+Primary Impression: ${cond}
+Confidence Score:   ${score} (${parseFloat(score)>.85?'High':'Moderate'})
+
+DETAILS
+━━━━━━━
+• Input processed: "${input.slice(0,60)}"
+• Analysis depth: Full diagnostic scan
+• Parameters evaluated: ${Math.floor(Math.random()*8+4)} clinical indicators
+• Risk level: ${parseFloat(score)>.85?'⚠️ Urgent review required':'📋 Routine follow-up'}
+
+RECOMMENDATIONS
+━━━━━━━━━━━━━━━
+1. Consult specialist within ${parseFloat(score)>.85?'24 hours':'7 days'}
+2. Additional imaging: ${Math.random()>.5?'CT scan recommended':'Ultrasound suggested'}
+3. Lab work: CBC, CMP, troponin levels
+
+⚠️ This is a clinical decision support tool.
+   Final diagnosis requires licensed physician review.`;
+  await streamText(resp, 'tm-output', 12);
+}
+
+async function genFinanceResponse(p, input) {
+  const change=(Math.random()*10-5).toFixed(2);
+  const direction=parseFloat(change)>0?'BULLISH 📈':'BEARISH 📉';
+  const resp=`FINANCIAL ANALYSIS
+━━━━━━━━━━━━━━━━━━
+${p.name} · ${p.accuracy} accuracy · ${p.response_time}
+
+SIGNAL: ${direction}
+Predicted Change: ${change}% (30-day horizon)
+Confidence: ${(Math.random()*.15+.7).toFixed(2)}
+
+KEY SIGNALS DETECTED
+━━━━━━━━━━━━━━━━━━━━
+• Technical: RSI ${Math.floor(Math.random()*40+30)}, MACD ${parseFloat(change)>0?'positive':'negative'} crossover
+• Sentiment: News score +${(Math.random()*.4+.3).toFixed(2)}, Social ${(Math.random()*.3+.4).toFixed(2)}
+• Macro: Fed policy impact ${Math.random()>.5?'favorable':'headwind'}
+• Volume: ${Math.random()>.5?'Above':'Below'} 20-day average by ${Math.floor(Math.random()*30+5)}%
+
+RISK ASSESSMENT
+━━━━━━━━━━━━━━━
+• Volatility: ${(['Low','Medium','High'])[Math.floor(Math.random()*3)]}
+• Max drawdown: -${(Math.random()*8+2).toFixed(1)}%
+• Sharpe estimate: ${(Math.random()*.8+0.8).toFixed(2)}
+
+⚠️ Not financial advice. Past performance ≠ future results.`;
+  await streamText(resp, 'tm-output', 12);
+}
+
+async function genRoboticsResponse(p, input) {
+  const resp=`ROBOT COMMAND EXECUTION
+━━━━━━━━━━━━━━━━━━━━━━━
+Model: ${p.name} | ${p.accuracy} success rate
+
+TASK PARSED: "${input.slice(0,60)}"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MOTION PLAN GENERATED
+Step 1 → [SENSE]  Environment scan: 127 points mapped
+Step 2 → [PLAN]   Optimal path: 3 waypoints, distance 1.24m
+Step 3 → [ACT]    Joint commands:
+         J1:  +23.4°  J2: -12.1°  J3: +45.0°
+         J4:   +8.7°  J5:  -3.2°  J6:  +0.0°
+Step 4 → [VERIFY] Force sensor: 4.2N (within safe limits)
+Step 5 → [DONE]   Task completed ✓
+
+EXECUTION METRICS
+━━━━━━━━━━━━━━━━━
+• Execution time: ${Math.floor(Math.random()*3+1)}.${Math.floor(Math.random()*9)}s
+• Path accuracy: ±0.${Math.floor(Math.random()*5+1)}mm
+• Collision checks: 248 passed, 0 failed
+• Battery used: ${Math.floor(Math.random()*3+1)}% of capacity`;
+  await streamText(resp, 'tm-output', 10);
+}
+
+async function genSecurityResponse(p, input) {
+  const risk=['LOW','MEDIUM','HIGH','CRITICAL'][Math.floor(Math.random()*4)];
+  const colors={'LOW':'#34d399','MEDIUM':'#fbbf24','HIGH':'#f97316','CRITICAL':'#ef4444'};
+  const threats=['SQL Injection attempt detected','XSS payload in user input','DDoS pattern: SYN flood','Credential stuffing attack','Zero-day exploit signature'];
+  const threat=threats[Math.floor(Math.random()*threats.length)];
+  const resp=`THREAT ANALYSIS REPORT
+━━━━━━━━━━━━━━━━━━━━━━
+${p.name} · ${p.accuracy} detection · FPR < 0.01%
+
+RISK LEVEL: ${risk}
+━━━━━━━━━━━━
+Input analyzed: "${input.slice(0,50)}"
+Threat detected: ${threat}
+Confidence: ${(Math.random()*.15+.82).toFixed(3)}
+
+INDICATORS OF COMPROMISE
+━━━━━━━━━━━━━━━━━━━━━━━━
+• Pattern match: ${Math.floor(Math.random()*3+1)} known signatures
+• Behavioral score: ${(Math.random()*.4+.6).toFixed(2)}/1.0
+• Entropy analysis: ${Math.random()>.5?'Anomalous':'Normal'}
+• Source reputation: ${Math.random()>.5?'⚠️ Flagged IP range':'✓ Clean'} 
+
+RECOMMENDED ACTIONS
+━━━━━━━━━━━━━━━━━━━
+1. ${risk==='CRITICAL'?'Block immediately and alert SOC':'Review and monitor'}
+2. Preserve forensic evidence
+3. Check lateral movement indicators
+4. Update detection rules
+
+⚡ Response time: ${Math.floor(Math.random()*4+1)}ms | ${p.accuracy} detection rate`;
+  await streamText(resp, 'tm-output', 10);
+}
+
+async function genDataResponse(p, input) {
+  const resp=`DATA ANALYSIS COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━
+${p.name} · ${p.accuracy} accuracy
+
+Dataset: "${input.slice(0,50)}"
+Rows analyzed: ${(Math.floor(Math.random()*900+100)).toLocaleString()}
+Features: ${Math.floor(Math.random()*20+5)}
+
+STATISTICAL SUMMARY
+━━━━━━━━━━━━━━━━━━
+• Mean:     ${(Math.random()*100+50).toFixed(2)}
+• Std Dev:  ${(Math.random()*20+5).toFixed(2)}
+• Skewness: ${(Math.random()*2-1).toFixed(3)}
+• Kurtosis: ${(Math.random()*4+1).toFixed(3)}
+
+ANOMALIES DETECTED: ${Math.floor(Math.random()*8+2)}
+━━━━━━━━━━━━━━━━━━━━
+Row ${Math.floor(Math.random()*900+100)}: Value ${(Math.random()*200+100).toFixed(1)} (3.2σ deviation)
+Row ${Math.floor(Math.random()*900+100)}: Missing pattern in 4 columns
+Row ${Math.floor(Math.random()*900+100)}: Temporal anomaly detected
+
+FORECAST (30-day)
+━━━━━━━━━━━━━━━━━
+Trend: ${Math.random()>.5?'📈 Upward':'📉 Downward'} ${(Math.random()*15+2).toFixed(1)}%
+Confidence interval: [${(Math.random()*80+60).toFixed(1)}, ${(Math.random()*20+90).toFixed(1)}]`;
+  await streamText(resp, 'tm-output', 11);
+}
+
+async function genDefaultResponse(p, input) {
+  const resp=`INFERENCE RESULT
+━━━━━━━━━━━━━━━━
+Model: ${p.name} (${p.market_id})
+Category: ${p.category}
+Parameters: ${p.parameters} | Accuracy: ${p.accuracy}
+
+INPUT PROCESSED
+━━━━━━━━━━━━━━━
+"${input.slice(0,80)}"
+
+OUTPUT
+━━━━━━
+Processing complete. The model has analyzed your input using ${p.parameters} parameters.
+Response generated with ${p.accuracy} confidence in ${Math.floor(Math.random()*200+30)}ms.
+
+The analysis indicates ${Math.random()>.5?'positive':'neutral'} pattern matching
+across ${Math.floor(Math.random()*8+3)} dimensional feature space.
+
+METADATA
+━━━━━━━━
+• Inference time: ${Math.floor(Math.random()*200+30)}ms
+• Tokens processed: ${Math.floor(Math.random()*500+100)}
+• Confidence: ${p.accuracy}
+• Framework: ${p.specs?.framework||'PyTorch'}`;
+  await streamText(resp, 'tm-output', 12);
+}
+</script>
+</body>
+</html>

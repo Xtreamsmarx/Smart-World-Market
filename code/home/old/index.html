@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart World Market � Universe Marketplace</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#7c3aed">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/home/style.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-icon">?</div>
+    <span class="nav-logo-text">Smart World Market</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/compare">Compare</a></li><li><a href="/compose">?? Compose</a></li>
+    <li><a href="/search-page">Search</a></li>
+    <li><a href="/member">Dashboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/sell" class="btn btn-primary">+ List Product</a>
+  </div>
+</nav>
+
+<!-- --------------- HERO --------------- -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="hero-content">
+    <!-- Announcement badge -->
+    <div class="hero-badge">
+      <span class="live-dot"></span>
+      World's First Universe Marketplace &nbsp;�&nbsp;
+      <span class="badge-live">LIVE</span>
+      &nbsp;�&nbsp; <span id="live-count">100</span> products
+    </div>
+
+    <!-- Main title -->
+    <h1 class="hero-title">
+      Every Product<br>
+      in the <span class="gt">Universe</span>
+    </h1>
+
+    <!-- Animated subtitle -->
+    <div class="hero-sub">
+      <span class="sub-static">AI � Physical � Biological � Human � Space �&nbsp;</span>
+      <span id="typing-text" class="typing-text"></span>
+    </div>
+
+    <!-- Search -->
+    <div class="search-wrap" id="main-search-wrap">
+      <form id="search-form" onsubmit="handleSearch(event)" autocomplete="off">
+        <div class="search-bar" id="main-search-bar">
+          <span class="search-icon">??</span>
+          <input type="text" id="search-inp" class="search-input"
+                 placeholder="Search AI models, hardware, biotech, space tech..."
+                 autocomplete="off">
+          <button type="submit" class="search-btn">Search Universe</button>
+        </div>
+      </form>
+      <div id="suggest-drop" class="suggest-drop"></div>
+    </div>
+
+    <!-- Hero CTAs -->
+    <div class="hero-ctas">
+      <a href="/vitrin" class="btn btn-primary btn-lg">?? Explore Universe</a>
+      <a href="/compare" class="btn btn-glass btn-lg">?? Compare Products</a>
+      <a href="/sell" class="btn btn-glass btn-lg">?? Sell</a>
+    </div>
+
+    <!-- AI Chat toggle -->
+    <button class="ai-toggle" id="ai-toggle-btn" onclick="toggleAIChat()">
+      ?? Ask AI Assistant ?
+    </button>
+
+    <!-- AI Chat panel -->
+    <div class="ai-panel" id="ai-panel" style="display:none">
+      <div class="ai-answer" id="ai-answer">
+        <div class="ai-welcome">
+          <div class="ai-avatar">??</div>
+          <div>Hi! Ask me anything about universe products � AI models, biotech, space tech. I'll find the best match.</div>
+        </div>
+      </div>
+      <div id="ai-cards" class="grid g3" style="margin-top:1rem"></div>
+      <div class="ai-input-row">
+        <input type="text" id="ai-input" class="inp" placeholder="What's the best AI for cancer detection?" style="flex:1">
+        <button class="btn btn-primary" onclick="doAskAI()">Ask ?</button>
+      </div>
+    </div>
+
+    <!-- Category pills -->
+    <div class="cat-pills" id="cat-pills">
+      <button class="cat-pill active" onclick="filterCat('all',this)">?? All</button>
+      <button class="cat-pill" onclick="filterCat('Language Model',this)">?? Language AI</button>
+      <button class="cat-pill" onclick="filterCat('Image Generation',this)">?? Image AI</button>
+      <button class="cat-pill" onclick="filterCat('Code Generation',this)">?? Code</button>
+      <button class="cat-pill" onclick="filterCat('Voice & Audio',this)">??? Voice</button>
+      <button class="cat-pill" onclick="filterCat('Healthcare AI',this)">?? Health AI</button>
+      <button class="cat-pill" onclick="filterCat('Financial AI',this)">?? Finance</button>
+      <button class="cat-pill" onclick="filterCat('Biological',this)">?? Bio</button>
+      <button class="cat-pill" onclick="filterCat('Space Tech',this)">?? Space</button>
+      <button class="cat-pill" onclick="filterCat('Robotics',this)">?? Robots</button>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER STRIP -->
+<div class="ticker-wrap">
+  <div class="ticker-track" id="ticker-track">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-icon">??</div>
+    <span class="stat-n gt" data-target="100">0</span>
+    <span class="stat-l">Universe Products</span>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">??</div>
+    <span class="stat-n gt" data-target="48000">0</span>
+    <span class="stat-l">Sellers</span>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">??</div>
+    <span class="stat-n gt" data-target="1247000">0</span>
+    <span class="stat-l">Buyers</span>
+  </div>
+  <div class="stat-item">
+    <div class="stat-icon">?</div>
+    <span class="stat-n gt" data-target="3892000">0</span>
+    <span class="stat-l">Transactions</span>
+  </div>
+</div>
+
+<!-- FEATURED STORIES -->
+<section class="stories-section">
+  <div class="section-header">
+    <div class="sec-label">? Featured</div>
+    <h2>Top Universe Products</h2>
+    <p style="color:var(--t2);margin-top:.5rem;font-size:.95rem">Verified, high-performance, trusted by thousands</p>
+  </div>
+  <div class="stories-row" id="stories-row"></div>
+</section>
+
+<!-- TRENDING STRIP -->
+<section class="trending-section">
+  <div class="trending-header">
+    <div class="sec-label">?? Trending</div>
+    <a href="/vitrin?sort=popular" class="btn btn-ghost btn-sm">View all ?</a>
+  </div>
+  <div class="grid g3" id="trending-grid"></div>
+</section>
+
+<!-- UNIVERSE MAP -->
+<section class="universe-map-section">
+  <div class="section-header">
+    <div class="sec-label">? Universe Map</div>
+    <h2>Every Category of Existence</h2>
+    <p style="color:var(--t2);margin-top:.5rem;font-size:.95rem">100 products spanning every domain � physical, virtual, biological, and beyond</p>
+  </div>
+  <div class="universe-map-grid" id="universe-map-grid"></div>
+</section>
+
+<!-- PRODUCT FEED -->
+<section class="feed-section">
+  <div class="section-header">
+    <div class="sec-label" id="feed-label">? All Products</div>
+    <h2 id="feed-title">Universe Feed</h2>
+    <p style="color:var(--t2);font-size:.95rem;margin-top:.5rem" id="feed-subtitle">100 extraordinary products from across existence</p>
+  </div>
+  <div class="grid g3" id="feed-grid"></div>
+  <div style="text-align:center;margin-top:2.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+    <a href="/vitrin" class="btn btn-outline btn-lg">Browse All 100 Products ?</a>
+    <a href="/compare" class="btn btn-ghost btn-lg">?? Compare Products</a>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section">
+  <div class="section-header">
+    <div class="sec-label">? Simple</div>
+    <h2>How Smart World Market Works</h2>
+  </div>
+  <div class="grid g3">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-icon">??</div>
+      <h3>Discover</h3>
+      <p>Search our universe of 100+ products using AI-powered search with RAG and local LLM recommendations.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-icon">??</div>
+      <h3>Acquire</h3>
+      <p>Purchase any product � physical, virtual, biological, or human service � with secure global payments.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-icon">??</div>
+      <h3>Monetize</h3>
+      <p>List your own creations and earn 70% revenue share from buyers across the universe.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section">
+  <div class="cta-box">
+    <div class="cta-glow"></div>
+    <div class="cta-content">
+      <div class="cta-badge">?? Join 48,000+ Sellers</div>
+      <h2>List Your Product on the Universe</h2>
+      <p>From AI models to biological discoveries � if it exists, it can be sold here.</p>
+      <div class="cta-btns">
+        <a href="/sell" class="btn btn-white btn-lg">Start Selling Today ?</a>
+        <a href="/vitrin" class="btn btn-lg cta-explore">Explore Products</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="nav-logo" style="margin-bottom:.75rem">
+        <div class="nav-logo-icon">?</div>
+        <span class="nav-logo-text">Smart World Market</span>
+      </div>
+      <p>Universe Marketplace � Physical � Virtual � Biological � Human � Space</p>
+    </div>
+    <div>
+      <div class="footer-h">Marketplace</div>
+      <ul class="footer-links">
+        <li><a href="/vitrin">Browse All</a></li>
+        <li><a href="/sell">Sell Product</a></li>
+        <li><a href="/compare">Compare</a></li><li><a href="/compose">?? Compose</a></li>
+        <li><a href="/search-page">AI Search</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">Account</div>
+      <ul class="footer-links">
+        <li><a href="/login">Sign In</a></li>
+        <li><a href="/login#register">Register</a></li>
+        <li><a href="/member">Dashboard</a></li>
+        <li><a href="/profile">Profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-h">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>� 2026 Smart World Market. The Universe's Marketplace.</span>
+    <span>Made with ?? for all intelligent life</span>
+  </div>
+</footer>
+
+<!-- Live notification (populated by JS) -->
+<div id="live-notif" class="live-notif" style="display:none"></div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/home/script.js"></script>
+</body>
+</html>

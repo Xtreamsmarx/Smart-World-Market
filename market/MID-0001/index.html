@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MedVision Pro · MID-0001 — Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Back bar -->
+<div class="back-bar">
+  <a href="">← Smart World Market</a>
+  <a href="/vitrin">Vitrin</a>
+  <a href="/product/MID-0001">Full Details</a>
+  <span class="mid-pill">MID-0001</span>
+</div>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb"></div>
+  <canvas id="c"></canvas>
+  <div class="hero-inner">
+    <div class="mid-badge"><div class="dot"></div> MARKET ID: MID-0001</div>
+    <div class="avatar">M</div>
+    <div class="cat-pill">Healthcare AI</div>
+    <h1>MedVision Pro</h1>
+    <p class="hero-short">Advanced medical imaging AI for early disease detection</p>
+    <div class="hero-btns">
+      <button class="btn btn-sound" id="sound-btn" onclick="toggleSpeak()">🔊 Listen</button>
+      <button class="btn btn-buy" onclick="goBuy()">🚀 Buy — $299/monthly</button>
+      <a class="btn btn-outline" href="/product/MID-0001">Full Details</a>
+    </div>
+  </div>
+</section>
+
+<!-- Body -->
+<div class="body">
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box"><span class="sv">4.9</span><span class="sl">Rating (847 reviews)</span></div>
+    <div class="stat-box"><span class="sv">7B</span><span class="sl">Parameters</span></div>
+    <div class="stat-box"><span class="sv">97.3%</span><span class="sl">Accuracy</span></div>
+    <div class="stat-box"><span class="sv">12,400</span><span class="sl">Downloads</span></div>
+  </div>
+
+  <!-- Tags -->
+  <div class="tags"><span class="tag">medical</span><span class="tag">imaging</span><span class="tag">healthcare</span><span class="tag">diagnosis</span><span class="tag">cancer detection</span></div>
+
+  <!-- Description -->
+  <div class="sec">
+    <div class="sec-title">📖 About</div>
+    <p class="desc">MedVision Pro is trained on 10 million annotated scans achieving 97.3% accuracy for cancer, pneumonia, and critical conditions from X-rays, MRIs, and CT scans. Trusted by 200+ hospitals worldwide with real-time diagnostic support.</p>
+  </div>
+
+  <!-- Specs -->
+  <div class="sec">
+    <div class="sec-title">⚙️ Specifications</div>
+    <table class="specs">
+      <tr><td>Market ID</td><td>MID-0001</td></tr>
+      <tr><td>Category</td><td>Healthcare AI</td></tr>
+      <tr><td>Parameters</td><td>7B</td></tr>
+      <tr><td>Accuracy</td><td>97.3%</td></tr>
+      <tr><td>Response Time</td><td>&lt; 200ms</td></tr>
+      <tr><td>API Calls/Month</td><td>100,000</td></tr>
+      <tr><td>License</td><td>Commercial</td></tr>
+    </table>
+  </div>
+
+  <!-- Seller -->
+  <div class="sec">
+    <div class="sec-title">👤 Seller</div>
+    <div class="seller-card">
+      <div class="s-av">MT</div>
+      <div>
+        <div class="s-name">MedTech Solutions</div>
+        <div class="s-ver">✓ Verified Seller</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy -->
+  <div class="buy-section">
+    <div class="price">$299</div>
+    <div class="per">per monthly · Commercial license</div>
+    <button class="buy-full" onclick="goBuy()">🔒 Purchase Access — MedVision Pro</button>
+  </div>
+</div>
+
+<footer>Smart World Market AI Marketplace · MID-0001 · World's First AI Model Marketplace · © 2026</footer>
+
+<script src="script.js"></script>
+</body>
+</html>

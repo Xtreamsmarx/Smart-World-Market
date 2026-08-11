@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard � Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/member/style.css">
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">?</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/vitrin">Vitrin</a></li>
+    <li><a href="/compare">Compare</a></li><li><a href="/compose">?? Compose</a></li><li><a href="/search-page">Search</a></li>
+    <li><a href="/member" class="active">Dashboard</a></li>
+  </ul>
+  <div class="nav-actions" id="nav-user-area">
+    <a href="/login" class="btn btn-ghost">Sign In</a>
+    <a href="/login" class="btn btn-primary">Create Account</a>
+  </div>
+</nav>
+
+<div class="member-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="member-sidebar">
+    <div class="user-card">
+      <div class="user-avatar" id="user-avatar">?</div>
+      <div class="user-name" id="user-name">Guest</div>
+      <div class="user-email" id="user-email">Sign in for full access</div>
+    </div>
+    <nav class="side-nav">
+      <a class="side-link active" href="/member">?? Dashboard</a>
+      <a class="side-link" href="/vitrin">?? Explore</a>
+      <a class="side-link" href="/search-page">?? Search</a>
+      <a class="side-link" href="/sell">? List Product</a>
+      <a class="side-link" href="/profile">?? Profile</a>
+      <a class="side-link" href="#" onclick="Auth.logout();location.href='/'">?? Sign Out</a>
+    </nav>
+    <div class="ollama-status" id="ollama-status">
+      <div class="status-dot" id="status-dot"></div>
+      <div>
+        <div style="font-size:.78rem;font-weight:700">Ollama AI</div>
+        <div id="status-text" style="font-size:.68rem;color:var(--t3)">Checking...</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="member-main">
+
+    <!-- Welcome header -->
+    <div class="welcome-header">
+      <div>
+        <h2>Welcome back, <span class="gt" id="welcome-name">Explorer</span> ??</h2>
+        <p style="color:var(--t2);font-size:.9rem;margin-top:.25rem">Here's your universe at a glance</p>
+      </div>
+      <div style="display:flex;gap:.75rem">
+        <a href="/vitrin" class="btn btn-outline">Browse Universe</a>
+        <a href="/sell" class="btn btn-primary">+ List Product</a>
+      </div>
+    </div>
+
+    <!-- Quick stats -->
+    <div class="grid g4" style="margin-bottom:2rem">
+      <div class="stat-card"><div class="sc-icon">??</div><div class="sc-val" data-target="100">0</div><div class="sc-lbl">Universe Products</div></div>
+      <div class="stat-card"><div class="sc-icon">??</div><div class="sc-val">10</div><div class="sc-lbl">Biological Products</div></div>
+      <div class="stat-card"><div class="sc-icon">??</div><div class="sc-val">5</div><div class="sc-lbl">Space Tech Items</div></div>
+      <div class="stat-card"><div class="sc-icon">??</div><div class="sc-val">12</div><div class="sc-lbl">Featured AI Models</div></div>
+    </div>
+
+    <!-- AI Recommendations -->
+    <div class="section-block">
+      <div class="block-header">
+        <h3>?? AI Recommendations</h3>
+        <button class="btn btn-ghost btn-sm" onclick="refreshRecs()">? Refresh</button>
+      </div>
+      <div class="grid g3" id="recs-grid">
+        <div class="skeleton" style="height:200px;border-radius:var(--r-lg)"></div>
+        <div class="skeleton" style="height:200px;border-radius:var(--r-lg)"></div>
+        <div class="skeleton" style="height:200px;border-radius:var(--r-lg)"></div>
+      </div>
+    </div>
+
+    <!-- Ask AI -->
+    <div class="section-block">
+      <div class="block-header"><h3>? Ask Universe AI</h3></div>
+      <div class="ai-chat-box">
+        <div id="chat-messages" class="chat-messages">
+          <div class="chat-msg bot"><div class="chat-bubble">Hello! I'm your Smart World Market AI. Ask me about any product in the universe � AI models, biotech, space tech, or anything else!</div></div>
+        </div>
+        <div class="chat-input-row">
+          <input type="text" class="inp" id="chat-inp" placeholder="What's the best AI for medical imaging?" style="flex:1">
+          <button class="btn btn-primary" onclick="sendChat()">Send ?</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Universe categories feed -->
+    <div class="section-block">
+      <div class="block-header"><h3>?? Universe Categories</h3></div>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+
+  </main>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/member/script.js"></script>
+</body>
+</html>

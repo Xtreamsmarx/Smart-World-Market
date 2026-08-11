@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vitrin � Universe Showcase � Smart World Market</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/code/vitrin/style.css">
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-logo"><div class="nav-logo-icon">?</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li><li><a href="/vitrin" class="active">Vitrin</a></li>
+    <li><a href="/compare">Compare</a></li><li><a href="/compose">?? Compose</a></li><li><a href="/search-page">Search</a></li>
+  </ul>
+  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a><a href="/sell" class="btn btn-primary">+ List</a></div>
+</nav>
+
+<!-- Compact hero -->
+<div class="vitrin-hero">
+  <canvas id="cv"></canvas>
+  <div class="vh-inner">
+    <div class="sec-label">? Universe Showcase</div>
+    <h1>The <span class="gt">Vitrin</span></h1>
+    <p>100 products � AI � Hardware � Biotech � Space � Human Services</p>
+  </div>
+</div>
+
+<!-- --- STICKY FILTER BAR --- -->
+<div class="filter-bar" id="filter-bar">
+  <!-- Row 1: search + category pills -->
+  <div class="fb-row1">
+    <div class="fb-search-wrap">
+      <span class="fb-search-icon">??</span>
+      <input type="text" id="fb-search" class="fb-search" placeholder="Search products..." oninput="onSearch()" autocomplete="off">
+      <button class="fb-clear-search" id="fb-clear-search" onclick="clearSearch()" style="display:none">?</button>
+    </div>
+    <div class="cat-tabs-wrap">
+      <div class="cat-tabs" id="cat-tabs">
+        <button class="cat-tab active" data-cat="all" onclick="setCat('all',this)">?? All <span class="cat-count" id="count-all"></span></button>
+        <!-- populated by JS -->
+      </div>
+    </div>
+    <div class="fb-actions">
+      <select class="fb-select" id="sort-sel" onchange="applyAll()">
+        <option value="default">? Featured</option>
+        <option value="rating">?? Top Rated</option>
+        <option value="popular">?? Popular</option>
+        <option value="price_asc">?? Low Price</option>
+        <option value="price_desc">?? High Price</option>
+        <option value="newest">?? Newest</option>
+      </select>
+      <div class="view-btns">
+        <button class="view-btn active" id="vbtn-grid" onclick="setView('grid',this)" title="Grid">?</button>
+        <button class="view-btn" id="vbtn-list" onclick="setView('list',this)" title="List">?</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: price chips + rating chips -->
+  <div class="fb-row2">
+    <div class="chip-group">
+      <span class="chip-label">Price:</span>
+      <button class="chip active" data-price="all" onclick="setPrice('all',this)">All</button>
+      <button class="chip" data-price="free" onclick="setPrice('free',this)">?? Free</button>
+      <button class="chip" data-price="low" onclick="setPrice('low',this)">&lt; $100</button>
+      <button class="chip" data-price="mid" onclick="setPrice('mid',this)">$100-500</button>
+      <button class="chip" data-price="high" onclick="setPrice('high',this)">$500+</button>
+    </div>
+    <div class="chip-group">
+      <span class="chip-label">Rating:</span>
+      <button class="chip active" data-rat="0" onclick="setRating(0,this)">Any</button>
+      <button class="chip" data-rat="4.5" onclick="setRating(4.5,this)">? 4.5+</button>
+      <button class="chip" data-rat="4.0" onclick="setRating(4.0,this)">? 4.0+</button>
+      <button class="chip" data-rat="3.5" onclick="setRating(3.5,this)">? 3.5+</button>
+    </div>
+    <div class="chip-group">
+      <span class="chip-label">Billing:</span>
+      <button class="chip active" data-bill="all" onclick="setBilling('all',this)">All</button>
+      <button class="chip" data-bill="monthly" onclick="setBilling('monthly',this)">Monthly</button>
+      <button class="chip" data-bill="yearly" onclick="setBilling('yearly',this)">Yearly</button>
+      <button class="chip" data-bill="one-time" onclick="setBilling('one-time',this)">One-time</button>
+    </div>
+    <button class="clear-all-btn" id="clear-all-btn" onclick="clearAllFilters()" style="display:none">? Clear All</button>
+  </div>
+
+  <!-- Active filter pills -->
+  <div class="active-filters" id="active-filters" style="display:none">
+    <span style="font-size:.72rem;color:var(--t3);margin-right:.25rem">Active:</span>
+    <div id="active-pills"></div>
+  </div>
+</div>
+
+<!-- RESULT COUNT -->
+<div class="result-bar" id="result-bar">
+  <span id="result-count">Loading...</span>
+  <a href="/compare" class="btn btn-ghost btn-sm">?? Compare selected</a>
+</div>
+
+<!-- MAIN BODY -->
+<div class="vitrin-body">
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-section">
+      <div class="sb-title">?? Advanced Filters</div>
+      <label class="sb-toggle">
+        <span>Verified Sellers Only</span>
+        <input type="checkbox" id="tog-verified" onchange="applyAll()">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </label>
+      <label class="sb-toggle">
+        <span>CPU-Only (No GPU)</span>
+        <input type="checkbox" id="tog-cpu" onchange="applyAll()">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </label>
+      <label class="sb-toggle">
+        <span>API Available</span>
+        <input type="checkbox" id="tog-api" onchange="applyAll()">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+      </label>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">?? Price Range ($)</div>
+      <div class="price-inputs">
+        <input type="number" class="price-inp" id="min-price" placeholder="Min" min="0" oninput="applyAll()">
+        <span style="color:var(--t3)">�</span>
+        <input type="number" class="price-inp" id="max-price" placeholder="Max" min="0" oninput="applyAll()">
+      </div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">??? Categories</div>
+      <div id="sidebar-cats"></div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:.5rem" onclick="clearAllFilters()">Reset All Filters</button>
+  </aside>
+
+  <!-- GRID -->
+  <main class="vitrin-main">
+    <div class="product-grid" id="vitrin-grid"></div>
+    <div id="no-results" style="display:none;text-align:center;padding:4rem;color:var(--t2)">
+      <div style="font-size:3rem;margin-bottom:1rem">??</div>
+      <h3>No products found</h3>
+      <p style="margin:.5rem 0 1.5rem">Try adjusting filters or <button class="btn btn-outline btn-sm" onclick="clearAllFilters()">clear all filters</button></p>
+    </div>
+  </main>
+</div>
+
+<script src="/code/shared/common.js"></script>
+<script src="/code/vitrin/script.js"></script>
+</body>
+</html>

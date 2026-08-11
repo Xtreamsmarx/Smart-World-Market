@@ -1,0 +1,45 @@
+/* Profile page */
+body { background:var(--space); }
+.profile-cover { height:220px; position:relative; overflow:hidden; background:radial-gradient(ellipse at center,#1a0533 0%,#050d1e 60%,#03030a 100%); margin-top:62px; }
+#cv { position:absolute; inset:0; opacity:.5; }
+.cover-overlay { position:absolute; inset:0; background:linear-gradient(to bottom,transparent 50%,var(--space) 100%); }
+
+.profile-info-bar { background:rgba(9,4,24,.95); border-bottom:1px solid var(--border); padding:1.5rem 0; }
+.profile-inner { max-width:1200px; margin:0 auto; padding:0 2rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+.profile-avatar-wrap { position:relative; flex-shrink:0; }
+.profile-avatar {
+  width:90px; height:90px; border-radius:50%; background:var(--grad);
+  display:flex; align-items:center; justify-content:center;
+  font-size:2.25rem; font-weight:900; color:#fff;
+  border:3px solid var(--space); position:relative;
+}
+.verified-ring {
+  position:absolute; inset:-4px; border-radius:50%;
+  border:2px solid transparent;
+  background:linear-gradient(var(--space),var(--space)) padding-box, var(--grad) border-box;
+  animation:spin 8s linear infinite;
+}
+.profile-meta { flex:1; min-width:200px; }
+.profile-meta h2 { font-size:1.5rem; font-weight:900; margin-bottom:.25rem; }
+.profile-stats { display:flex; gap:2rem; }
+.ps-item { text-align:center; }
+.ps-n { font-size:1.5rem; font-weight:900; display:block; background:var(--grad); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.ps-l { font-size:.7rem; color:var(--t3); text-transform:uppercase; letter-spacing:.07em; }
+
+.profile-body { max-width:1200px; margin:0 auto; padding:2rem; }
+.profile-tabs { display:flex; gap:.3rem; border-bottom:1px solid var(--border); margin-bottom:2rem; }
+.ptab { background:none; border:none; border-bottom:2px solid transparent; padding:.75rem 1.25rem; color:var(--t2); font-size:.9rem; font-weight:600; cursor:pointer; font-family:inherit; transition:all var(--t) var(--ease); }
+.ptab:hover { color:var(--t1); }
+.ptab.active { color:var(--violet-l); border-bottom-color:var(--violet); }
+.ptab-panel { display:none; }
+.ptab-panel.active { display:block; }
+
+.no-listings { text-align:center; padding:4rem; background:var(--surf); border:1px solid var(--border); border-radius:var(--r-lg); }
+
+.about-section { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.about-card { background:var(--surf); border:1px solid var(--border); border-radius:var(--r-lg); padding:1.5rem; }
+.about-card h4 { font-size:.9rem; font-weight:800; margin-bottom:.5rem; }
+.passport-grid { display:flex; flex-wrap:wrap; gap:.5rem; margin-top:.75rem; }
+.passport-item { background:rgba(124,58,237,.12); border:1px solid rgba(124,58,237,.22); color:var(--violet-l); padding:.3rem .75rem; border-radius:var(--r-f); font-size:.75rem; font-weight:600; }
+
+@media(max-width:768px) { .about-section { grid-template-columns:1fr; } .profile-inner { flex-direction:column; text-align:center; } .profile-stats { justify-content:center; } }
