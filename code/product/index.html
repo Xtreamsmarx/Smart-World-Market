@@ -5,7 +5,7 @@
 <title>Product — Smart World Market</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/Smart-World-Market/code/shared/common.css">
 <style>
 body{background:var(--space);padding-top:62px}
 .p-hero{position:relative;padding:3rem 0;overflow:hidden;border-bottom:1px solid var(--border)}
@@ -45,9 +45,9 @@ body{background:var(--space);padding-top:62px}
 </head>
 <body>
 <nav class="nav">
-  <a href="/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
-  <ul class="nav-links"><li><a href="/">Home</a></li><li><a href="/vitrin">Vitrin</a></li><li><a href="/search-page">Search</a></li></ul>
-  <div class="nav-actions"><a href="/login" class="btn btn-ghost">Sign In</a><a href="/sell" class="btn btn-primary">+ List</a></div>
+  <a href="/Smart-World-Market/" class="nav-logo"><div class="nav-logo-icon">⚡</div><span class="nav-logo-text">Smart World Market</span></a>
+  <ul class="nav-links"><li><a href="/Smart-World-Market/">Home</a></li><li><a href="/Smart-World-Market/vitrin">Vitrin</a></li><li><a href="/Smart-World-Market/search-page">Search</a></li></ul>
+  <div class="nav-actions"><a href="/Smart-World-Market/login" class="btn btn-ghost">Sign In</a><a href="/Smart-World-Market/sell" class="btn btn-primary">+ List</a></div>
 </nav>
 
 <!-- Product hero (populated by JS) -->
@@ -78,7 +78,7 @@ body{background:var(--space);padding-top:62px}
   <div>Loading product...</div>
 </div>
 
-<script src="/code/shared/common.js"></script>
+<script src="/Smart-World-Market/code/shared/common.js"></script>
 <script>
 const mid = location.pathname.split('/product/')[1];
 
@@ -87,7 +87,7 @@ function heroInner(p) {
     <div style="display:grid;grid-template-columns:1fr 340px;gap:3rem;align-items:start">
       <div>
         <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.75rem;flex-wrap:wrap">
-          <a href="/vitrin" style="color:rgba(255,255,255,.5);font-size:.8rem">← All Products</a>
+          <a href="/Smart-World-Market/vitrin" style="color:rgba(255,255,255,.5);font-size:.8rem">← All Products</a>
           <span style="color:var(--t3)">›</span>
           <span class="badge badge-c">${p.category}</span>
           <span class="mid-pill"><span class="dot"></span>${p.market_id}</span>
@@ -108,7 +108,7 @@ function heroInner(p) {
           <div style="font-size:.875rem;color:var(--t2)">⚡ <strong style="color:var(--t1)">${p.response_time}</strong></div>
           <div style="font-size:.875rem;color:var(--t2)">📞 <strong style="color:var(--t1)">${fmtNum(p.api_calls_per_month)}</strong>/mo</div>
         </div>
-        <div id="p-tags" class="pc-tags">${(p.tags||[]).map(t=>`<a href="/vitrin?q=${t}" class="tag">${t}</a>`).join('')}</div>
+        <div id="p-tags" class="pc-tags">${(p.tags||[]).map(t=>`<a href="/Smart-World-Market/vitrin?q=${t}" class="tag">${t}</a>`).join('')}</div>
       </div>
 
       <div class="buy-card" style="background:var(--surf);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.75rem;position:sticky;top:80px">
@@ -119,7 +119,7 @@ function heroInner(p) {
           <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.875rem;color:var(--t2);border-bottom:1px solid var(--border)"><span style="color:var(--green)">✓</span>${p.response_time} response time</div>
           <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem 0;font-size:.875rem;color:var(--t2)"><span style="color:var(--green)">✓</span>${p.license} license · Cancel anytime</div>
         </div>
-        <a href="/payment/${p.market_id}" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:.5rem;display:flex">🚀 Buy Full Access</a>
+        <a href="/Smart-World-Market/payment/${p.market_id}" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:.5rem;display:flex">🚀 Buy Full Access</a>
         <button class="btn btn-lg" style="width:100%;justify-content:center;margin-bottom:.5rem;background:rgba(16,185,129,.18);border:1px solid rgba(16,185,129,.4);color:#34d399" onclick="openTest()">🧪 Test Model Free</button>
         <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:1.25rem" onclick="speakProduct('${p.name}. ${(p.short_description||'').replace(/'/g,"\\'")}')">🔊 Listen</button>
         <div style="padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:.75rem">
@@ -217,12 +217,12 @@ async function load() {
       <div>result = client.models.invoke(<span style="color:#fbbf24">"${p.market_id}"</span>, input=<span style="color:#fbbf24">"Your input"</span>)</div>
       <div>print(result.output)</div>
     </div>
-    <a href="/payment/${p.market_id}" class="btn btn-primary">Get API Key →</a>
+    <a href="/Smart-World-Market/payment/${p.market_id}" class="btn btn-primary">Get API Key →</a>
   </div>`;
 
   // Related
   if (data.related?.length) {
-    document.getElementById('related-grid').innerHTML = data.related.map(r=>`<a href="/product/${r.market_id}" class="card" style="text-decoration:none"><div class="pc-top" style="background:${r.gradient}"></div><div class="pc-body"><div style="font-weight:700;margin-bottom:.25rem">${r.name}</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:.75rem">${r.short_description?.slice(0,60)}...</div><div style="display:flex;justify-content:space-between"><span style="font-weight:700">$${r.price}/mo</span><span style="color:#f59e0b">★ ${r.rating}</span></div></div></a>`).join('');
+    document.getElementById('related-grid').innerHTML = data.related.map(r=>`<a href="/Smart-World-Market/product/${r.market_id}" class="card" style="text-decoration:none"><div class="pc-top" style="background:${r.gradient}"></div><div class="pc-body"><div style="font-weight:700;margin-bottom:.25rem">${r.name}</div><div style="font-size:.78rem;color:var(--t2);margin-bottom:.75rem">${r.short_description?.slice(0,60)}...</div><div style="display:flex;justify-content:space-between"><span style="font-weight:700">$${r.price}/mo</span><span style="color:#f59e0b">★ ${r.rating}</span></div></div></a>`).join('');
     document.getElementById('p-related').style.display='block';
   }
 
@@ -763,3 +763,4 @@ METADATA
 </script>
 </body>
 </html>
+

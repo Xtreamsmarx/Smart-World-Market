@@ -5,7 +5,7 @@
 <title>Sign In — Smart World Market</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/code/shared/common.css">
+<link rel="stylesheet" href="/Smart-World-Market/code/shared/common.css">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--space);color:var(--t1);min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
@@ -86,7 +86,7 @@ body{font-family:'Inter',sans-serif;background:var(--space);color:var(--t1);min-
 
 <!-- RIGHT: form -->
 <div class="form-side">
-  <a href="/" class="back-link">← Back to Universe</a>
+  <a href="/Smart-World-Market/" class="back-link">← Back to Universe</a>
   <div class="auth-tabs">
     <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
     <button class="auth-tab" id="tab-reg" onclick="switchTab('register')">Create Account</button>
@@ -152,7 +152,7 @@ body{font-family:'Inter',sans-serif;background:var(--space);color:var(--t1);min-
   </form>
 </div>
 
-<script src="/code/shared/common.js"></script>
+<script src="/Smart-World-Market/code/shared/common.js"></script>
 <script>
 // ── Canvas ──────────────────────────────────────────────────
 initParticles('cv', 65);
@@ -210,7 +210,7 @@ async function handleLogin(e) {
     const res=await apiFetch('/login-user',{method:'POST',body:JSON.stringify({email:document.getElementById('login-email').value,password:document.getElementById('login-pwd').value})});
     Auth.login({...res.user,avatar:res.user.avatar||res.user.name?.[0]?.toUpperCase()});
     showMsg('✓ Welcome back, '+res.user.name+'!','success');
-    setTimeout(()=>location.href='/member',700);
+    setTimeout(()=>location.href='/Smart-World-Market/member',700);
   } catch(err) {
     showMsg(err.message?.includes('401')?'Incorrect email or password.':'Login failed. Please try again.');
     btn.disabled=false; btn.textContent='Sign In to Universe →';
@@ -226,7 +226,7 @@ async function handleRegister(e) {
     const res=await apiFetch('/register',{method:'POST',body:JSON.stringify({name,email:document.getElementById('reg-email').value,password:document.getElementById('reg-pwd').value,account_type:document.getElementById('reg-type').value})});
     Auth.login({...res.user,avatar:res.user.avatar||name[0]?.toUpperCase()});
     showMsg('✓ Welcome, '+name+'! Account created.','success');
-    setTimeout(()=>location.href='/member',700);
+    setTimeout(()=>location.href='/Smart-World-Market/member',700);
   } catch(err) {
     showMsg(err.message?.includes('409')?'Email already registered. Sign in instead.':'Registration failed. Please try again.');
     btn.disabled=false; btn.textContent='Create Universe Account →';
@@ -238,10 +238,11 @@ function socialLogin(p) {
   const names={google:'Universe Explorer',github:'Dev Pioneer',guest:'Guest Visitor'};
   Auth.login({name:names[p],email:p+'@swm.demo',avatar:'🌍',provider:p,joined:new Date().toISOString()});
   showMsg('✓ Signed in as '+names[p],'success');
-  setTimeout(()=>location.href='/member',700);
+  setTimeout(()=>location.href='/Smart-World-Market/member',700);
 }
 
 initCounters();
 </script>
 </body>
 </html>
+
